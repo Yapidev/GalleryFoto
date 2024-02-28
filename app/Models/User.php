@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'tanggal_lahir',
+        'nickname'
     ];
 
     /**
@@ -42,4 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relasi has Many ke table fotos
+     *
+     * @return void
+     */
+    public function hasManyPhotos()
+    {
+        return $this->hasMany(Foto::class);
+    }
+
+    /**
+     * Relasi has Many ke table albums
+     *
+     * @return void
+     */
+    public function hasManyAlbums()
+    {
+        return $this->hasMany(Album::class);
+    }
 }

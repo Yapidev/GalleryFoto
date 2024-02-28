@@ -22,4 +22,14 @@ class Album extends Model
      * @var string
      */
     protected $table = 'albums';
+
+    /**
+     * Relasi belongs To ke table users
+     *
+     * @return void
+     */
+    public function belongsToUser()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -1,5 +1,79 @@
 @extends('layouts.app')
 
+@push('style')
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .photo-container {
+            width: 100%;
+            columns: 5;
+            column-gap: 20px
+        }
+
+        .photo-container .box {
+            width: 100%;
+            margin-bottom: 10px;
+            break-inside: avoid;
+        }
+
+        #img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .photo-container {
+                width: calc(100% - 40px);
+                columns: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .photo-container {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                columns: 1;
+            }
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+        }
+
+        .overlay:hover {
+            opacity: 1;
+            /* Munculkan overlay saat dihover */
+        }
+
+        .overlay h3 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+@endpush
+
 @section('content')
     {{-- Header --}}
     <div class="card w-100 bg-light-info overflow-hidden shadow-none">
@@ -8,10 +82,10 @@
                 <div class="col-sm-6">
                     <h5 class="fw-semibold mb-9 fs-5">Selamat datang! {{ Auth::user()->name }}</h5>
                     <p class="mb-9">
-                        Upload karyamu disini!
+                        Upload karyamu disini
                     </p>
-                    <a href="{{ route('create-photo') }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-post-modal">Upload Foto
-                        Sekarang!</a>
+                    <a class="btn btn-primary" href="{{ route('create-photo') }}">Upload Foto
+                        Sekarang</a>
                 </div>
                 <div class="col-sm-5">
                     <div class="position-relative mb-n7 text-end">
@@ -25,27 +99,34 @@
     {{-- Header --}}
 
     {{-- Card post --}}
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card rounded-2 overflow-hidden hover-img">
+    <div class="photo-container w-100">
+        @forelse ($photos as $item)
+            <div class="overflow-hidden box">
                 <div class="position-relative">
-                    <a href=""><img src="{{ asset('assets/images/poto.png') }}" class="card-img-top rounded-0"
-                            style="" alt="..."></a>
-                    <span
-                        class="badge bg-white text-dark fs-2 rounded-4 lh-sm mb-9 me-9 py-1 px-2 fw-semibold position-absolute bottom-0 end-0">2
-                        Menit Lalu</span>
+                    <a href="{{ route('view-detail-photo', $item->slug) }}">
+                        <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                            alt="...">
+                        <div class="overlay d-flex flex-column">
+                            <h3>{{ $item->title }}</h3>
+                            <p>{{ $item->description }}</p>
+                        </div>
+                    </a>
                 </div>
-                <div class="card-body p-4">
-                    <a class="d-block my-0 fs-5 text-dark fw-semibold" href="#">Poto menfess ku aw aw :3</a>
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="d-flex align-items-center gap-2"><i class="ti ti-eye text-dark fs-5"></i>9,125</div>
-                        <div class="d-flex align-items-center gap-2"><i class="ti ti-message-2 text-dark fs-5"></i>4</div>
-                        <div class="d-flex align-items-center fs-2 ms-auto"><i class="ti ti-point text-dark"></i>Senin, Dec
-                            23</div>
+                <div class="p-2 pt-1">
+                    <div class="d-flex gap-2 align-items-center pt-2">
+                        <img class="rounded-circle"
+                            src="{{ Storage::url($item->belongsToUser->avatar) ?: asset('assets/images/profile/user-1.jpg') }}"
+                            alt="Profile Picture" style="width: 40px; height: 40px;">
+                        <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
                     </div>
                 </div>
             </div>
-        </div>
+        @empty
+            tidak ada data
+        @endforelse
     </div>
     {{-- Card post --}}
 @endsection
+
+@push('script')
+@endpush

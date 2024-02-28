@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -23,56 +24,44 @@
     {{-- CSS LAYOUTS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/main/app-layouts.css') }}">
 
-    {{-- STACK LINK --}}
-    @stack('link')
+    {{-- STACK STYLE --}}
+    @stack('style')
+
+    <style>
+        #toast-container {
+            top: 15px;
+        }
+    </style>
 </head>
 
 <body>
 
     <!-- Preloader -->
     <div class="preloader">
-        <img src="{{ asset('assets/sekolah/sekolah.png') }}" alt="loader" class="lds-ripple img-fluid" />
+        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico"
+            alt="loader" class="lds-ripple img-fluid" />
     </div>
     <!-- Preloader -->
     <div class="preloader">
-        <img src="{{ asset('assets/sekolah/sekolah.png') }}" alt="loader" class="lds-ripple img-fluid" />
+        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico"
+            alt="loader" class="lds-ripple img-fluid" />
     </div>
+
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme" data-layout="vertical" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
-        <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <div>
-                <div class="brand-logo d-flex align-items-center justify-content-center">
-                    <a href="{{ route('home') }}"
-                        style="width: 100%; display: flex; justify-content: center; align-items: center"
-                        class="text-nowrap logo-img py-4">
-                        <img style="width: 40%" src="{{ asset('assets/sekolah/sekolah.png') }}" class="dark-logo"
-                            width="180" alt="" />
-                        <img style="width: 40%" src="{{ asset('assets/sekolah/sekolah.png') }}" class="light-logo"
-                            width="180" alt="" />
-                    </a>
-                    <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-                        <i class="ti ti-x fs-8 text-muted"></i>
-                    </div>
-                </div>
-                <!-- Sidebar navigation-->
-                @include('components.sidebar')
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
         <!--  Sidebar End -->
         <!--  Main wrapper -->
         <div class="body-wrapper">
             <!--  Header Start -->
-            <header class="app-header">
+            <header class="app-header w-100">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link sidebartoggler nav-icon-hover ms-n3" id="headerCollapse"
-                                href="javascript:void(0)">
+                                data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
+                                aria-controls="offcanvasWithBothOptions">
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
@@ -84,10 +73,10 @@
                         </li>
                     </ul>
                     <div class="d-block d-lg-none">
-                        <img src="{{ asset('assets/sekolah/sekolah.png') }}" class="dark-logo" width="50"
-                            alt="" />
-                        <img src="{{ asset('assets/sekolah/sekolah.png') }}" class="light-logo" width="50"
-                            alt="" />
+                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
+                            class="dark-logo" width="50" alt="" />
+                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/light-logo.svg"
+                            class="light-logo" width="50" alt="" />
                     </div>
                     <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -110,9 +99,10 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                             <div class="user-profile-img">
-                                                <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
-                                                    class="rounded-circle" width="35" height="35"
-                                                    alt="" />
+                                                <img id="photo-profile-nav"
+                                                    src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                                    class="rounded-circle" style="object-fit: cover" width="35"
+                                                    height="35" alt="" />
                                             </div>
                                         </div>
                                     </a>
@@ -123,9 +113,10 @@
                                                 <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                                <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
-                                                    class="rounded-circle" width="80" height="80"
-                                                    alt="" />
+                                                <img id="photo-profile-master"
+                                                    src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                                    class="rounded-circle" style="object-fit: cover" width="80"
+                                                    height="80" alt="" />
                                                 <div class="ms-3">
                                                     <h5 class="mb-1 fs-3">{{ Auth::user()->name }}</h5>
                                                     <span class="mb-1 d-block text-dark">User</span>
@@ -138,6 +129,8 @@
 
                                             </div>
                                             <div class="d-grid py-4 px-7 pt-8">
+                                                <a href="{{ route('profile.index') }}"
+                                                    class="btn btn-outline-primary mb-3">Profile</a>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                                     class="btn btn-outline-danger">Log Out</a>
@@ -171,167 +164,19 @@
             <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="" data-simplebar>
                 <ul id="sidebarnav">
                     <li class="sidebar-item">
-                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-apps"></i>
-                            </span>
-                            <span class="hide-menu">Apps</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse first-level my-3">
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-chat.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">New messages arrived</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-invoice.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Invoice App</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">Get latest invoice</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-mobile.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Contact Application</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">2 Unsaved Contacts</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-message-box.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Email App</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">Get new emails</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-cart.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">User Profile</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">learn more information</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-date.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Calendar App</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">Get dates</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-lifebuoy.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Contact List Table</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">Add new contact</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="sidebar-item py-2">
-                                <a href="#" class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-dd-application.svg"
-                                            alt="" class="img-fluid" width="24" height="24">
-                                    </div>
-                                    <div class="d-inline-block">
-                                        <h6 class="mb-1 bg-hover-primary">Notes Application</h6>
-                                        <span class="fs-2 d-block fw-normal text-muted">To-do and Daily tasks</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <ul class="px-8 mt-7 mb-4">
-                                <li class="sidebar-item mb-3">
-                                    <h5 class="fs-5 fw-semibold">Quick Links</h5>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">Pricing Page</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">Authentication Design</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">Register Now</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">404 Error Page</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">Notes App</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">User Application</a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a class="fw-semibold text-dark" href="#">Account Settings</a>
-                                </li>
-                            </ul>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="app-chat.html" aria-expanded="false">
+                        <a class="sidebar-link" href="{{ route('home') }}" aria-expanded="false">
                             <span>
                                 <i class="ti ti-message-dots"></i>
                             </span>
-                            <span class="hide-menu">Chat</span>
+                            <span class="hide-menu">Beranda</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="app-calendar.html" aria-expanded="false">
+                        <a class="sidebar-link" href="{{ route('my-photo') }}" aria-expanded="false">
                             <span>
-                                <i class="ti ti-calendar"></i>
+                                <i class="ti ti-message-dots"></i>
                             </span>
-                            <span class="hide-menu">Calendar</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="app-email.html" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-mail"></i>
-                            </span>
-                            <span class="hide-menu">Email</span>
+                            <span class="hide-menu">Foto Saya</span>
                         </a>
                     </li>
                 </ul>
@@ -445,9 +290,26 @@
     <!--  current page js files -->
     <script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
 
     {{-- STACK SCRIPT --}}
     @stack('script')
+
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 3000,
+        };
+        @if (session()->has('error'))
+            toastr.error('{{ session('error') }}');
+        @elseif (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @elseif (session()->has('warning'))
+            toastr.warning('{{ session('warning') }}');
+        @endif
+    </script>
 </body>
 
 </html>

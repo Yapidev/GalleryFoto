@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Foto;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $photos = Foto::query()
+            ->inRandomOrder()
+            ->with('belongsToUser')
+            ->get();
+
+        return view('home', compact('photos'));
     }
 }

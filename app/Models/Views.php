@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KomentarFoto extends Model
+class Views extends Model
 {
     use HasFactory;
 
@@ -21,15 +21,15 @@ class KomentarFoto extends Model
      *
      * @var string
      */
-    protected $table = 'komentar_fotos';
+    protected $table = 'views';
 
     /**
-     * Relasi belongs to one ke table users
+     * Relasi belongs to one ke table foto
      *
      * @return void
      */
-    public function belongsToUser()
+    public function belongsToFoto()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Foto::class, 'foto_id');
     }
 }
