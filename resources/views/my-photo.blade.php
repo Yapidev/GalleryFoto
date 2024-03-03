@@ -3,94 +3,104 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
     <style>
-        .card-custome {
-            position: relative;
-            overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .photo-container {
             width: 100%;
-            height: 200px;
+            columns: 4;
+            column-gap: 20px
         }
 
-        .card-image {
-            position: relative;
-        }
-
-        .card {
+        .photo-container .box {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            margin-bottom: 10px;
+            break-inside: avoid;
         }
 
-        .card-overlay {
+        #img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .photo-container {
+                columns: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .photo-container {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                columns: 1;
+            }
+        }
+
+        .overlay {
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .card-custome:hover .card-overlay {
-            opacity: 1;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .text-light {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             color: #fff;
-            /* Set the text color to light */
+            opacity: 0;
+            transition: opacity 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
         }
 
-        .card-custome:hover .card {
-            filter: brightness(60%);
+        .overlay:hover {
+            opacity: 1;
+            /* Munculkan overlay saat dihover */
         }
 
-        .modal-edit .modal-body .preview-map {
-            height: 680px;
+        .overlay h3 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
         }
 
-        .modal-tambah .modal-body .preview-map {
-            height: 680px;
-            border-radius: 20px;
+        .overlay-icons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
 
-        @media only screen and (max-width: 768px) {
-            .modal-edit .modal-body .preview-map {
-                height: 300px;
-                margin-bottom: 20px;
-            }
-
-            .modal-tambah .modal-body .preview-map {
-                height: 300px;
-                margin-bottom: 20px;
-            }
+        .overlay-icons a {
+            display: inline-block;
+            margin-right: 5px;
+            color: #fff;
+            font-size: 18px;
         }
     </style>
 @endpush
 
 @section('content')
     {{-- Header --}}
-    <div class="card w-100 bg-light-info overflow-hidden shadow-none">
-        <div class="card-body py-3">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-sm-6">
-                    <h5 class="fw-semibold mb-9 fs-5">Ini adalah daftar foto yang telah anda upload</h5>
-                    <p class="mb-9">
-                        Anda bisa menambah, mengedit, dan menghapus foto-foto anda
-                    </p>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#upload-foto-modal">Upload Foto
-                        Sekarang!</button>
+    <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-8">Foto Saya</h4>
+                    <p class="mb-8">Halaman yang berisi foto yang sudah anda upload.</p>
+                    <a class="btn btn-primary" href="{{ route('create-photo') }}">Tambah Foto</a>
                 </div>
-                <div class="col-sm-5">
-                    <div class="position-relative mb-n7 text-end">
-                        <img src="{{ asset('assets/images/backgrounds/welcome-bg2.png') }}" alt=""
-                            class="img-fluid">
+                <div class="col-3">
+                    <div class="text-center mb-n5">
+                        <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt=""
+                            class="img-fluid mb-n4">
                     </div>
                 </div>
             </div>
@@ -99,48 +109,32 @@
     {{-- Header --}}
 
     {{-- Foreach data photos --}}
-    <div class="row">
+    <div class="photo-container">
         @forelse ($photos as $item)
-            <div class="col-12 col-md-4 my-3">
-                <div class="card-custome">
-                    <div class="card-image">
-                        <a href="javascript:void(0)" class="card text-white w-100 card-hover"
-                            style="background: url('{{ asset('storage/' . $item->file_path) }}') center; background-size: cover; width: 100%; height: 200px; object-fit: cover;">
-                        </a>
-                    </div>
-                    <div class="card-overlay">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-4">
-                                        <a href="{{ route('edit-photo', $item->id) }}" class="me-2 fs-5" style="border: none; background: transparent;"><i
-                                                class="ti ti-edit text-white edit-btn"></i></a>
-                                        <form id="deleteForm" action="{{ route('delete-photo', $item->id) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button style="border: none; background: transparent;" type="button"
-                                                class="fs-5 text-danger cursor-pointer"><i
-                                                    class="ti ti-trash  delete-btn"></i></button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 100px">
-                                <h4 class="card-title mb-1 text-light">{{ $item->title }}</h4>
-                                <h6 class="card-text fw-normal text-light d-inline-block text-truncate"
-                                    style="max-width: 150px">
-                                    {{ $item->description }}
-                                </h6>
+            <div class="overflow-hidden box">
+                <div class="position-relative">
+                    <a href="{{ route('private-album') }}">
+                        <img id="img" src="{{ asset('storage/' . $item->file_path) }}" class="card-img-top rounded-6"
+                            alt="...">
+                        <div class="overlay d-flex flex-column">
+                            <h4 class="card-title mb-1 text-light truncate">{{ $item->name }}</h4>
+                            <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
+                                {{ $item->description }}
+                            </h6>
+                            <div class="overlay-icons">
+                                <a href="{{ route('view-detail-photo', $item->slug) }}"><i class="ti ti-eye"></i></a>
+                                <a href="{{ route('edit-photo', $item->id) }}"><i class="ti ti-edit"></i></a>
+                                <a href=""><i class="ti ti-trash"></i></a>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         @empty
             Tidak ada data.
         @endforelse
     </div>
+    {{-- Foreach data photos --}}
 @endsection
 
 @push('script')
@@ -149,42 +143,6 @@
     {{-- Script untuk validasi modal unggah foto --}}
     <script>
         $(document).ready(() => {
-            const form = $('#upload-foto-form');
-            form.on('submit', (event) => {
-                event.preventDefault();
-
-                // Mendapatkan nilai input judul dan foto
-                const judulInput = $('#judul-input').val();
-                const fotoInput = $('#formFileLg').val();
-
-                // declare variable checkerror
-                let error = false;
-
-                // Memeriksa apakah input judul kosong
-                if (judulInput.trim() === '') {
-                    // Menampilkan pesan kesalahan untuk input judul
-                    $('#error-judul').text('*Judul tidak boleh kosong.');
-                    error = true;
-                } else {
-                    $('#error-judul').text('');
-                }
-
-                // Memeriksa apakah input foto kosong
-                if (fotoInput.trim() === '') {
-                    // Menampilkan pesan kesalahan untuk input foto
-                    $('#error-foto').text('*Foto tidak boleh kosong.');
-                    error = true;
-                } else {
-                    $('#error-judul').text('');
-                }
-
-                // Jalankan jika variable error bernilai false
-                if (error === false) {
-                    // Jika input judul dan foto tidak kosong, submit formulir
-                    form.off('submit').submit();
-                }
-            });
-
             $('.delete-btn').on('click', function() {
 
                 var form = $(this).closest('form');

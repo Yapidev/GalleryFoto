@@ -166,7 +166,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('home') }}" aria-expanded="false">
                             <span>
-                                <i class="ti ti-message-dots"></i>
+                                <i class="ti ti-home"></i>
                             </span>
                             <span class="hide-menu">Beranda</span>
                         </a>
@@ -174,9 +174,17 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('my-photo') }}" aria-expanded="false">
                             <span>
-                                <i class="ti ti-message-dots"></i>
+                                <i class="ti ti-photo"></i>
                             </span>
                             <span class="hide-menu">Foto Saya</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('my-album') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-album"></i>
+                            </span>
+                            <span class="hide-menu">Album Saya</span>
                         </a>
                     </li>
                 </ul>

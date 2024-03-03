@@ -27,6 +27,7 @@ class HomeController extends Controller
         $photos = Foto::query()
             ->inRandomOrder()
             ->with('belongsToUser')
+            ->where('visibility', 'public')
             ->get();
 
         return view('home', compact('photos'));

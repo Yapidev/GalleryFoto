@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('fotos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('album_id')->nullable()->constrained('albums');
             $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('downloads')->default(0);
             $table->string('title');
             $table->string('slug');
             $table->boolean('comment_permit')->default(true);
             $table->string('file_path');
+            $table->enum('visibility', ['private', 'public'])->default('public');
             $table->text('description')->nullable();
             $table->timestamps();
         });

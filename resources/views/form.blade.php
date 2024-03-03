@@ -58,7 +58,8 @@
                         <div class="mb-3">
                             <label for="title" class="form-label">Judul</label>
                             <input type="text" name="title" id="title-input"
-                                class="form-control @error('title') is-invalid @enderror" value="{{ $photo->title }}">
+                                class="form-control @error('title') is-invalid @enderror" value="{{ $photo->title }}"
+                                placeholder="Beri judul untuk foto anda.">
                             @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -67,7 +68,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi (opsional)</label>
-                            <textarea name="description" id="description-input" class="form-control @error('description') is-invalid @enderror">{{ $photo->description }}</textarea>
+                            <textarea name="description" id="description-input" class="form-control @error('description') is-invalid @enderror"
+                                placeholder="Beri deskripsi untuk foto anda.">{{ $photo->description }}</textarea>
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -75,17 +77,13 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="old-album" class="form-label">Tambah ke album</label>
-                            <select name="old-album" id="album"
-                                class="form-select cursor-pointer @error('old-album') is-invalid @enderror">
-                                <option value="" selected>Pilih Album</option>
-                                <option value="">Album Keluarga</option>
+                            <label for="" class="form-label">Visibilitas</label>
+                            <select name="visibility" class="form-select" id="visibility">
+                                <option value="public" {{ $photo->visibility == 'public' ? 'selected' : '' }}>Publik
+                                </option>
+                                <option value="private" {{ $photo->visibility == 'private' ? 'selected' : '' }}>Privat
+                                </option>
                             </select>
-                            @error('old-album')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="form-check">
@@ -97,7 +95,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-start gap-2">
-                            <a href="{{ route('my-photo') }}" type="button" class="btn btn-danger">Kembali</a>
+                            <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
                             <button type="submit" class="btn btn-primary">Unggah foto</button>
                         </div>
                     </div>
@@ -153,7 +151,8 @@
                         <div class="mb-3">
                             <label for="title" class="form-label">Judul</label>
                             <input type="text" name="title" id="title-input"
-                                class="form-control @error('title') is-invalid @enderror" disabled>
+                                class="form-control @error('title') is-invalid @enderror" disabled
+                                placeholder="Beri judul untuk foto anda.">
                             @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -163,7 +162,7 @@
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi (opsional)</label>
                             <textarea name="description" id="description-input" class="form-control @error('description') is-invalid @enderror"
-                                disabled></textarea>
+                                disabled placeholder="Beri deskripsi untuk foto anda."></textarea>
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -171,17 +170,11 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="old-album" class="form-label">Tambah ke album</label>
-                            <select name="old-album" id="album"
-                                class="form-select cursor-pointer @error('old-album') is-invalid @enderror" disabled>
-                                <option value="" disabled selected>Pilih Album</option>
-                                <option value="">Album Keluarga</option>
+                            <label for="" class="form-label">Visibilitas</label>
+                            <select name="visibility" class="form-select" id="visibility" disabled>
+                                <option value="public" selected>Publik</option>
+                                <option value="private">Privat</option>
                             </select>
-                            @error('old-album')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="form-check">
@@ -193,7 +186,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-start gap-2">
-                            <a href="{{ route('my-photo') }}" type="button" class="btn btn-danger">Kembali</a>
+                            <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
                             <button type="submit" class="btn btn-primary" disabled>Unggah foto</button>
                         </div>
                     </div>
@@ -211,10 +204,10 @@
         const photoInput = document.getElementById('photo');
         const titleInput = document.getElementById('title-input');
         const descriptionInput = document.getElementById('description-input');
-        const albumSelect = document.getElementById('album');
         const submitButton = document.querySelector('button[type="submit"]');
         const commentPermit = document.getElementById('comment-permit');
-        const formInputs = [titleInput, descriptionInput, albumSelect, submitButton, commentPermit];
+        const visibility = document.getElementById('visibility');
+        const formInputs = [titleInput, descriptionInput, submitButton, commentPermit, visibility];
 
         // Menambahkan event listener saat gambar pratinjau diklik
         imagePreview.addEventListener('click', function() {

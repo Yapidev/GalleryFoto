@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
 use App\Models\Foto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UploadOrUpdateController extends Controller
 {
@@ -14,7 +16,12 @@ class UploadOrUpdateController extends Controller
      */
     public function create()
     {
-        return view('form');
+        $albums = Album::query()
+            ->whereuser_id(Auth::user()->id)
+            ->latest()
+            ->get();
+
+        return view('form', compact('albums'));
     }
 
     /**
@@ -29,6 +36,11 @@ class UploadOrUpdateController extends Controller
             return back()->with('warning', 'Anda tidak memiliki izin');
         }
 
-        return view('form', compact('photo'));
+        $albums = Album::query()
+            ->whereuser_id(Auth::user()->id)
+            ->latest()
+            ->get();
+
+        return view('form', compact('photo', 'albums'));
     }
 }

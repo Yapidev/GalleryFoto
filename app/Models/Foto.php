@@ -70,6 +70,58 @@ class Foto extends Model
      */
     public function commentsCount()
     {
-        return $this->hasManyComments->count();
+        return $this->hasManyComments()->count();
     }
+
+    /**
+     * Relasi belongsToMany ke table Likefotos
+     *
+     * @return void
+     */
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'like_fotos')->withTimestamps();
+    }
+
+    /**
+     * Fungsi untuk menghitung jumlah like
+     *
+     * @return void
+     */
+    public function likesCount()
+    {
+        return $this->likes()->count();
+    }
+
+    /**
+     * Fungsi untuk cek apakah foto sudah di like oleh user atau belum
+     *
+     * @return void
+     */
+    public function isLiked()
+    {
+        return $this->likes()->whereUser_id(auth()->id())->exists();
+    }
+
+    /**
+     * Relasi belongsToMany ke table albums
+     *
+     * @return void
+     */
+    public function belongsToManyAlbums()
+    {
+        return $this->belongsToMany(Album::class, 'album_details')->withTimestamps();
+    }
+
+    /**
+     * Fungsi untuk increment download
+     *
+     * @return void
+     */
+    public function incrementDownloads()
+    {
+        $this->downloads++;
+        $this->save();
+    }
+
 }

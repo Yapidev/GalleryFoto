@@ -9,7 +9,7 @@
         }
 
         #comments-container {
-            max-height: 300px;
+            max-height: 500px;
             /* Batas tinggi kontainer komentar */
             overflow-y: auto;
             /* Mengaktifkan scroll jika konten melebihi batas tinggi */
@@ -100,7 +100,7 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center mb-n5">
-                        <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt=""
+                        <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="" id="foto"
                             class="img-fluid mb-n4">
                     </div>
                 </div>
@@ -114,7 +114,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="d-flex align-items-center">
-                        <img src="{{ Storage::url($photo->file_path) }}" alt="" class="w-100 h-auto rounded-2">
+                        <img src="{{ Storage::url($photo->file_path) }}" alt="" class="w-100 h-auto rounded-2"
+                            id="foto">
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex flex-column justify-content-between">
@@ -136,13 +137,23 @@
                             {{-- jumlah views --}}
 
                             {{-- jumlah like --}}
-                            <div class="d-flex align-items-center gap-2 heart-icon" onclick="toggleHeart(this)">
-                                <i class="fas fa-heart fs-5"></i>
-                                <span id="like-count">1392</span>
+                            <div class="d-flex align-items-center gap-2 heart-icon cursor-pointer"
+                                onclick="toggleLike('{{ route('like-photo', $photo->id) }}')">
+                                <i class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }}"></i>
+                                <span id="like-count">{{ $photo->likesCount() }}</span>
                             </div>
                             {{-- jumlah like --}}
-                            <div class="d-flex align-items-center gap-2"><i class="ti ti-share-2 text-dark fs-5"></i>3</div>
-                            <div class="d-flex align-items-center fs-2 ms-auto"><i
+
+                            {{-- jumlah download --}}
+                            <div class="d-flex align-items-center gap-2 cursor-pointer">
+                                <a href="{{ route('download-photo', $photo->id) }}">
+                                    <i class="ti ti-download text-dark fs-5"></i>
+                                </a>
+                                <span id="download-count">{{ $photo->downloads }}</span>
+                            </div>
+                            {{-- jumlah download --}}
+
+                            <div class="d-flex align-itemsn-center fs-2 ms-auto"><i
                                     class="ti ti-point text-dark"></i>{{ $photo->created_at->translatedFormat('d M Y') }}
                             </div>
                         </div>
@@ -156,9 +167,10 @@
                                 <span id="comment-count"
                                     class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">{{ $photo->commentsCount() }}</span>
                             </div>
+                            {{-- Comment Section --}}
                             <div id="comments-container">
                                 @forelse ($photo->hasManyComments as $item)
-                                    <div class="p-4 rounded-2 bg-light mb-3" id="comment-${comment.id}">
+                                    <div class="p-4 rounded-2 bg-light mb-3">
                                         <div class="d-flex align-items-center gap-3">
                                             <img src="{{ asset('assets/images/profile/user-3.jpg') }}" alt=""
                                                 class="rounded-circle" width="33" height="33"
@@ -194,22 +206,20 @@
                                     Tidak ada data.
                                 @endforelse
                             </div>
+                            {{-- Comment Section --}}
                         </div>
                     @endif
                     {{-- Main Komentar Section --}}
 
                     {{-- Upload Komentar Section --}}
                     @if ($photo->comment_permit == true)
-                        <div class="comment mt-auto">
+                        <div class="comment mt-auto sticky-comment-section">
                             <h4 class="mb-4 fw-semibold">Beri Komentar</h4>
                             <form id="komentar-form" action="{{ route('post-comment', ['foto_id' => $photo->id]) }}"
                                 method="POST">
                                 @csrf
                                 @method('POST')
                                 <textarea id="comment-content" class="form-control mb-2" name="content" rows="5"></textarea>
-                                <div id="error-comment" class="text-danger mb-2">
-
-                                </div>
                                 <button id="submit-comment" class="btn btn-primary">Kirim Komentar</button>
                             </form>
                         </div>
@@ -220,6 +230,7 @@
             </div>
         </div>
     </div>
+    {{-- Photo content --}}
 
     {{-- Foto Lainnya --}}
     <div class="related-products pt-7">
@@ -240,7 +251,7 @@
                     <div class="p-2 pt-1">
                         <div class="d-flex gap-2 align-items-center pt-2">
                             <img class="rounded-circle"
-                                src="{{ Storage::url($item->belongsToUser->avatar) ?: asset('assets/images/profile/user-1.jpg') }}"
+                                src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
                                 alt="Profile Picture" style="width: 40px; height: 40px;">
                             <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
                         </div>
@@ -255,6 +266,16 @@
 @endsection
 
 @push('script')
+    {{-- Ajax Setup --}}
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    {{-- Ajax Setup --}}
+
     {{-- Script untuk comment --}}
     <script>
         $(document).ready(function() {
@@ -273,7 +294,7 @@
         });
     </script>
 
-    {{-- Script untuk delete data --}}
+    {{-- Script untuk delete komentar --}}
     <script>
         $(document).ready(function() {
             $('.delete-btn').on('click', function(e) {
@@ -295,6 +316,29 @@
             });
         });
     </script>
+    {{-- Script untuk delete komentar --}}
+
+    {{-- Script untuk like dan unlike --}}
+    <script>
+        function toggleLike(url) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function(response) {
+                    $('#like-count').text(response.likes_count);
+                    if (response.is_liked) {
+                        $('.heart-icon i').addClass('text-danger');
+                    } else {
+                        $('.heart-icon i').removeClass('text-danger');
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    </script>
+    {{-- Script untuk like dan unlike --}}
 
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 @endpush

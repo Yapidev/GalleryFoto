@@ -19,10 +19,15 @@ class FotoController extends Controller
      */
     public function view(string $slug)
     {
+
         $photo = Foto::query()
             ->whereSlug($slug)
             ->with('belongsToUser', 'hasManyComments')
             ->firstOrFail();
+
+        if ($photo->visibility == 'private') {
+            return back()->with('warning', 'Foto telah di privat, anda tidak memiliki akses');
+        }
 
         $photos = Foto::query()
             ->whereNot('slug', $slug)
@@ -68,7 +73,8 @@ class FotoController extends Controller
             'slug' => Str::slug($request->title),
             'comment_permit' => $request->commentPermit ? true : false,
             'description' => $request->description ?: null,
-            'file_path' => $file_path
+            'file_path' => $file_path,
+            'visibility' => $request->visibility
         ];
 
         // Membuat entitas Foto baru dengan data yang diterima
@@ -110,11 +116,7 @@ class FotoController extends Controller
         $photo->update($data);
         $photo->save();
 
-        if ($photo->wasChanged()) {
-            return redirect()->route('my-photo')->with('success', 'Berhasil memperbarui foto');
-        } else {
-            return redirect()->route('my-photo')->with('warning', 'Tidak ada perubahan.');
-        }
+        return redirect()->route('my-photo')->with('success', 'Berhasil memperbarui foto');
     }
 
     /**

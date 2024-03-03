@@ -10,7 +10,7 @@
 
         .photo-container {
             width: 100%;
-            columns: 5;
+            columns: 4;
             column-gap: 20px
         }
 
@@ -80,7 +80,7 @@
         <div class="card-body py-3">
             <div class="row justify-content-between align-items-center">
                 <div class="col-sm-6">
-                    <h5 class="fw-semibold mb-9 fs-5">Selamat datang! {{ Auth::user()->name }}</h5>
+                    <h5 class="fw-semibold mb-9 fs-5">Selamat datang di Photopie! {{ Auth::user()->name }}</h5>
                     <p class="mb-9">
                         Upload karyamu disini
                     </p>
@@ -107,15 +107,15 @@
                         <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
                             alt="...">
                         <div class="overlay d-flex flex-column">
-                            <h3>{{ $item->title }}</h3>
-                            <p>{{ $item->description }}</p>
+                            <h3>{{ Str::limit($item->title, 20) }}</h3>
+                            <p>{{ Str::limit($item->description, 20) }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="p-2 pt-1">
                     <div class="d-flex gap-2 align-items-center pt-2">
                         <img class="rounded-circle"
-                            src="{{ Storage::url($item->belongsToUser->avatar) ?: asset('assets/images/profile/user-1.jpg') }}"
+                            src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
                             alt="Profile Picture" style="width: 40px; height: 40px;">
                         <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
                     </div>

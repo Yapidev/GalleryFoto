@@ -32,4 +32,14 @@ class Album extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Relasi belongsToMany ke table fotos
+     *
+     * @return void
+     */
+    public function belongsToManyPhotos()
+    {
+        return $this->belongsToMany(Foto::class, 'album_details')->withTimestamps();
+    }
 }
