@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Foto;
 use App\Models\Views;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -29,22 +30,23 @@ class FotoController extends Controller
             return back()->with('warning', 'Foto telah di privat, anda tidak memiliki akses');
         }
 
-        $photos = Foto::query()
+        $other_photos = Foto::query()
             ->whereNot('slug', $slug)
             ->inRandomOrder()
             ->with('belongsToUser')
             ->get();
 
-        $userId = Auth::user()->id;
+        $user = Auth::user();
+        $recentView = $user->viewedPhotos()
+            ->whereFoto_id($photo->id)
+            ->whereDate('views.created_at', '>=', Carbon::now()->subDay())
+            ->exists();
 
-        if ($photo->user_id != $userId) {
-            Views::create([
-                'foto_id' => $photo->id,
-                'user_id' => $userId
-            ]);
+        if (!$recentView) {
+            $user->viewedPhotos()->attach($photo->id);
         }
 
-        return view('view-detail-photo', compact('photo', 'photos'));
+            return view('view-detail-photo', compact('photo', 'other_photos'));
     }
 
     /**
@@ -57,8 +59,8 @@ class FotoController extends Controller
     {
         // Validasi untuk field request yang masuk
         $request->validate([
-            'title' => ['required', 'string', 'unique:fotos,title'],
-            'description' => ['nullable', 'string'],
+            'title' => ['required', 'string', 'unique:fotos,title', 'max:50'],
+            'description' => ['nullable', 'string', 'max:300'],
             'photo' => ['required', 'image']
         ]);
 
@@ -94,8 +96,8 @@ class FotoController extends Controller
     public function update(Request $request, Foto $photo)
     {
         $request->validate([
-            'title' => ['required', 'string', 'unique:fotos,title,' . $photo->id],
-            'description' => ['nullable', 'string'],
+            'title' => ['required', 'string', 'unique:fotos,title,' . $photo->id], 'max:50',
+            'description' => ['nullable', 'string', 'max:300'],
             'photo' => ['nullable', 'image']
         ]);
 
@@ -122,17 +124,18 @@ class FotoController extends Controller
     /**
      * Fungsi untuk menghapus foto
      *
-     * @param  mixed $foto
+     * @param  mixed $photo
      * @return void
      */
-    public function delete(Foto $foto)
+    public function delete(Foto $photo)
     {
-        Storage::disk('public')->delete($foto->file_path);
+        Storage::disk('public')->delete($photo->file_path);
 
-        $foto->hasManyViews()->delete();
+        $photo->delete();
 
-        $foto->delete();
-
-        return back()->with('success', 'Berhasil menghapus foto');
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto berhasil dihapus'
+        ]);
     }
 }

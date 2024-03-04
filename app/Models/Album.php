@@ -38,7 +38,7 @@ class Album extends Model
      *
      * @return void
      */
-    public function belongsToManyPhotos()
+    public function photos()
     {
         return $this->belongsToMany(Foto::class, 'album_details')->withTimestamps();
     }

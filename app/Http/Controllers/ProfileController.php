@@ -11,12 +11,23 @@ use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
+    /**
+     * Fungsi untuk menampilkan halaman profile
+     *
+     * @return void
+     */
     protected function profilePage()
     {
         $user = Auth::user();
         return response()->view('profile', compact('user'));
     }
 
+    /**
+     * Fungsi untuk update foto profile
+     *
+     * @param  mixed $request
+     * @return void
+     */
     protected function updatePhotoProfileProcess(Request $request)
     {
         try {
@@ -46,6 +57,12 @@ class ProfileController extends Controller
         return response()->json(['error' => 'Gagal mengunggah foto'], 500);
     }
 
+    /**
+     * Fungsi untuk update password
+     *
+     * @param  mixed $request
+     * @return void
+     */
     protected function updatePassword(Request $request)
     {
         try {
@@ -78,6 +95,11 @@ class ProfileController extends Controller
         return response()->json(['error' => 'Gagal mengubah password'], 500);
     }
 
+    /**
+     * Fungsi untuk hapus foto profile
+     *
+     * @return void
+     */
     protected function deletePhoto()
     {
         try {
@@ -94,6 +116,12 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * Fungsi untuk update bio data profile
+     *
+     * @param  mixed $request
+     * @return void
+     */
     protected function updateBiodata(Request $request)
     {
         try {

@@ -34,13 +34,13 @@ class Foto extends Model
     }
 
     /**
-     * Relasi has Many ke table views
+     * Relasi belongsToMany ke table views
      *
      * @return void
      */
-    public function hasManyViews()
+    public function viewers()
     {
-        return $this->hasMany(views::class);
+        return $this->belongsToMany(User::class, 'views')->withTimestamps();
     }
 
     /**
@@ -50,7 +50,7 @@ class Foto extends Model
      */
     public function viewsCount()
     {
-        return $this->hasManyViews->count();
+        return $this->viewers()->count();
     }
 
     /**
@@ -108,7 +108,7 @@ class Foto extends Model
      *
      * @return void
      */
-    public function belongsToManyAlbums()
+    public function albums()
     {
         return $this->belongsToMany(Album::class, 'album_details')->withTimestamps();
     }
@@ -123,5 +123,4 @@ class Foto extends Model
         $this->downloads++;
         $this->save();
     }
-
 }

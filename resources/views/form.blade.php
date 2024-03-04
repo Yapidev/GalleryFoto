@@ -5,6 +5,10 @@
         #imagePreview {
             object-fit: cover;
         }
+
+        [disabled] {
+            cursor: not-allowed;
+        }
     </style>
 @endpush
 
@@ -89,7 +93,7 @@
                             <div class="form-check">
                                 <input class="form-check-input primary" type="checkbox" name="commentPermit"
                                     id="comment-permit" {{ $photo->comment_permit = true ? 'checked' : '' }}>
-                                <label class="form-check-label text-dark" for="flexCheckChecked">
+                                <label class="form-check-label text-dark" for="comment-permit">
                                     Ijinkan Komentar
                                 </label>
                             </div>
@@ -114,7 +118,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
                                         href="{{ route('home') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Unggah Foto</li>
+                                <li class="breadcrumb-item" aria-current="page">Simpan</li>
                             </ol>
                         </nav>
                     </div>
@@ -151,7 +155,7 @@
                         <div class="mb-3">
                             <label for="title" class="form-label">Judul</label>
                             <input type="text" name="title" id="title-input"
-                                class="form-control @error('title') is-invalid @enderror" disabled
+                                class="form-control @error('title') is-invalid @enderror"
                                 placeholder="Beri judul untuk foto anda.">
                             @error('title')
                                 <span class="invalid-feedback" role="alert">
@@ -162,7 +166,7 @@
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi (opsional)</label>
                             <textarea name="description" id="description-input" class="form-control @error('description') is-invalid @enderror"
-                                disabled placeholder="Beri deskripsi untuk foto anda."></textarea>
+                                placeholder="Beri deskripsi untuk foto anda."></textarea>
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -171,7 +175,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Visibilitas</label>
-                            <select name="visibility" class="form-select" id="visibility" disabled>
+                            <select name="visibility" class="form-select disabled" id="visibility">
                                 <option value="public" selected>Publik</option>
                                 <option value="private">Privat</option>
                             </select>
@@ -179,15 +183,15 @@
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="form-check">
                                 <input class="form-check-input primary" type="checkbox" name="commentPermit"
-                                    id="comment-permit" checked disabled>
-                                <label class="form-check-label text-dark" for="flexCheckChecked">
+                                    id="comment-permit" checked>
+                                <label class="form-check-label text-dark" for="comment-permit">
                                     Ijinkan Komentar
                                 </label>
                             </div>
                         </div>
                         <div class="d-flex justify-content-start gap-2">
                             <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
-                            <button type="submit" class="btn btn-primary" disabled>Unggah foto</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </div>
@@ -209,30 +213,50 @@
         const visibility = document.getElementById('visibility');
         const formInputs = [titleInput, descriptionInput, submitButton, commentPermit, visibility];
 
-        // Menambahkan event listener saat gambar pratinjau diklik
-        imagePreview.addEventListener('click', function() {
-            // Memicu klik pada input file
-            photoInput.click();
-        });
-
-        // Menambahkan event listener saat input file berubah
-        photoInput.addEventListener('change', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek apakah photo input kosong atau tidak saat halaman dimuat
             const file = photoInput.files[0];
-            if (file) {
-                // Membaca file gambar sebagai URL data
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Menampilkan gambar yang dikonfirmasi di pratinjau
-                    imagePreview.src = e.target.result;
-
-                    // Menghapus kelas disabled dan mengatur kursor
-                    formInputs.forEach(input => {
-                        input.removeAttribute('disabled');
-                        input.style.cursor = 'auto';
-                    });
-                };
-                reader.readAsDataURL(file);
+            if (!file) {
+                // Jika photo input kosong, beri atribut disabled pada input-input yang diperlukan
+                formInputs.forEach(input => {
+                    input.setAttribute('disabled', 'disabled');
+                });
             }
+
+            // Tambahkan event listener saat gambar pratinjau diklik
+            imagePreview.addEventListener('click', function() {
+                // Memicu klik pada input file
+                photoInput.click();
+            });
+
+            // Tambahkan event listener saat input file berubah
+            photoInput.addEventListener('change', function() {
+                const file = photoInput.files[0];
+                if (file) {
+                    // Membaca file gambar sebagai URL data
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Menampilkan gambar yang dikonfirmasi di pratinjau
+                        imagePreview.src = e.target.result;
+
+                        // Menghapus kelas disabled dan mengatur kursor
+                        formInputs.forEach(input => {
+                            input.removeAttribute('disabled');
+                            input.style.cursor = 'auto';
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Jika tidak ada file yang dipilih, beri atribut disabled pada elemen-elemen yang diperlukan
+                    formInputs.forEach(input => {
+                        input.setAttribute('disabled', 'disabled');
+                        input.style.cursor = 'not-allowed';
+                    });
+
+                    // Atur pratinjau gambar menjadi kosong
+                    imagePreview.src = '{{ asset('assets/images/pen.png') }}';
+                }
+            });
         });
     </script>
 @endpush

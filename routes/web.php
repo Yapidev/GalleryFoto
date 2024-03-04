@@ -6,10 +6,11 @@ use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikedPhotosController;
 use App\Http\Controllers\MyPhotoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UploadOrUpdateController;
-use App\Models\Foto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::get('album-details/{album}', [AlbumController::class, 'detail'])->name('album-detail');
     Route::get('private-album', [AlbumController::class, 'private'])->name('private-album');
     Route::get('download-photo/{photo}', [DownloadController::class, 'download'])->name('download-photo');
+    Route::get('liked-photos', [LikedPhotosController::class, 'view'])->name('liked-photos');
+    Route::get('search-photos', [SearchController::class, 'search'])->name('search-photos');
 
     // Route Post
     Route::post('upload-photo', [FotoController::class, 'upload'])->name('upload-photo');
@@ -54,7 +57,7 @@ Route::middleware('auth')->group(function () {
 
     // Route Delete
     Route::delete('delete-comment/{comment}', [KomentarController::class, 'deleteComment'])->name('delete-comment');
-    Route::delete('delete-photo/{foto}', [FotoController::class, 'delete'])->name('delete-photo');
+    Route::delete('delete-photo/{photo}', [FotoController::class, 'delete'])->name('delete-photo');
     Route::delete('delete-album/{album}', [AlbumController::class, 'delete'])->name('delete-album');
 
     // Profile Routes

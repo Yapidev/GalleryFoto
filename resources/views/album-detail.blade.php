@@ -115,7 +115,7 @@
                     </div>
                 </div>
             @empty
-                Tidak ada data.
+                @include('components.no-data')
             @endforelse
         </div>
         {{-- Foreach data photos --}}
@@ -182,7 +182,7 @@
                     </div>
                 </div>
             @empty
-                Tidak ada data.
+                @include('components.no-data')
             @endforelse
         </div>
         {{-- Foreach data photos --}}

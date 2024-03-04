@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @push('style')
+    <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
     <style>
         * {
             margin: 0;
@@ -92,9 +93,8 @@
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
-                    <h4 class="fw-semibold mb-8">Foto Saya</h4>
-                    <p class="mb-8">Halaman yang berisi foto yang sudah anda upload.</p>
-                    <a class="btn btn-primary" href="{{ route('create-photo') }}">Tambah Foto</a>
+                    <h4 class="fw-semibold mb-8">Foto Favorit</h4>
+                    <p class="mb-8">Halaman yang berisi foto yang anda sukai.</p>
                 </div>
                 <div class="col-3">
                     <div class="text-center mb-n5">
@@ -121,12 +121,6 @@
                                 <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
                                     {{ $item->description }}
                                 </h6>
-                                <div class="overlay-icons">
-                                    <a href="{{ route('view-detail-photo', $item->slug) }}"><i class="ti ti-eye"></i></a>
-                                    <a href="{{ route('edit-photo', $item->id) }}"><i class="ti ti-edit"></i></a>
-                                    <a class="delete-btn cursor-pointer"
-                                        data-url="{{ route('delete-photo', $item->id) }}"><i class="ti ti-trash"></i></a>
-                                </div>
                             </div>
                         </a>
                     </div>
@@ -140,49 +134,4 @@
 @endsection
 
 @push('script')
-    {{-- Script delete photo --}}
-    <script>
-        $(document).ready(() => {
-            $('.delete-btn').on('click', function() {
-
-                let url = $(this).data('url');
-                let box = $(this).closest('.box');
-
-                Swal.fire({
-                    title: 'Konfirmasi',
-                    text: 'Apakah Anda yakin ingin menghapus foto ini?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: "Hapus",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire({
-                                        title: 'Sukses',
-                                        text: response.message,
-                                        icon: 'success',
-                                        timer: 3000,
-                                        showConfirmButton: false
-                                    });
-                                    box.remove();
-                                } else {
-                                    Swal.fire({
-                                        title: 'Gagal',
-                                        text: response.message,
-                                        icon: 'error',
-                                        timer: 3000,
-                                        showConfirmButton: false
-                                    });
-                                }
-                            }
-                        })
-                    }
-                });
-            });
-        });
-    </script>
 @endpush

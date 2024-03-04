@@ -122,7 +122,7 @@
                 </div>
             </div>
         @empty
-            tidak ada data
+            @include('components.no-data')
         @endforelse
     </div>
     {{-- Card post --}}

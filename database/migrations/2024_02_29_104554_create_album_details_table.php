@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('album_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('album_id')->constrained('albums');
-            $table->foreignId('foto_id')->constrained('fotos');
+            $table->foreignId('album_id')->constrained('albums')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('foto_id')->constrained('fotos')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

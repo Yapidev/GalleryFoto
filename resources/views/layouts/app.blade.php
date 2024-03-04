@@ -24,12 +24,19 @@
     {{-- CSS LAYOUTS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/main/app-layouts.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
+
     {{-- STACK STYLE --}}
     @stack('style')
 
     <style>
         #toast-container {
             top: 15px;
+        }
+
+        #list-search-photos {
+            max-height: 300px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -59,15 +66,14 @@
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link sidebartoggler nav-icon-hover ms-n3" id="headerCollapse"
+                            <a class="nav-link sidebartoggler nav-icon-hover ms-n3 cursor-pointer" id="headerCollapse"
                                 data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
                                 aria-controls="offcanvasWithBothOptions">
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
                         <li class="nav-item d-none d-lg-block">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
+                            <a class="nav-link nav-icon-hover" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="ti ti-search"></i>
                             </a>
                         </li>
@@ -187,6 +193,14 @@
                             <span class="hide-menu">Album Saya</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('liked-photos') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-photo-heart"></i>
+                            </span>
+                            <span class="hide-menu">Foto Favorit</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -197,87 +211,16 @@
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content rounded-1">
                 <div class="modal-header border-bottom">
-                    <input type="search" class="form-control fs-3" placeholder="Search here" id="search" />
+                    <input type="search" class="form-control fs-3" placeholder="Cari disini" id="search" />
                     <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
                         <i class="ti ti-x fs-5 ms-3"></i>
                     </span>
                 </div>
                 <div class="modal-body message-body" data-simplebar="">
-                    <h5 class="mb-0 fs-5 p-1">Quick Page Links</h5>
+                    <h5 class="mb-0 fs-5 p-1">Cari Foto</h5>
                     <ul class="list mb-0 py-2">
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                                <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                                <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                                <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                                <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                                <span
-                                    class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                                <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                                <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                                <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                                <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                                <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                                <span
-                                    class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                            </a>
-                        </li>
-                        <li class="p-1 mb-1 bg-hover-light-black">
-                            <a href="#">
-                                <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                                <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                            </a>
+                        <li class="p-1 mb-1 bg-hover-light-black" id="list-search-photos">
+                            Temukan foto dengan inputkan kata kunci!
                         </li>
                     </ul>
                 </div>
@@ -299,6 +242,78 @@
     <script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
+    <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+
+    {{-- Ajax Setup --}}
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    {{-- Ajax Setup --}}
+
+    {{-- Ajax search  photos --}}
+    <script>
+        $(document).ready(function() {
+            $('#search').on('input', function() {
+                const keyword = $(this).val();
+                const url = '{{ route('search-photos') }}';
+
+                if (keyword !== '') {
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        data: {
+                            keyword: keyword
+                        },
+                        success: function(response) {
+                            var list = $('#list-search-photos');
+                            list.empty();
+
+                            if (response.length > 0) {
+                                // Jika ada hasil pencarian, tambahkan hasil ke daftar
+                                $.each(response, function(index, photo) {
+                                    var listItem = `
+                                    <li class="p-1 mb-1 bg-hover-light-black">
+                                        <a href="photo/${photo.slug}">
+                                            <div class="d-flex align-items-center py-9 mx-7 border-bottom">
+                                                <img src="/storage/${photo.file_path}" class="rounded-2" style="object-fit: cover" width="80" height="80" alt="" />
+                                                <div class="ms-3">
+                                                    <h5 class="mb-1 fs-3">${photo.title}</h5>
+                                                    <span class="mb-1 d-block text-dark">${photo.description}</span>
+                                                    <p class="mb-0 d-flex text-dark align-items-center gap-2">
+                                                        <i class="ti ti-user fs-4"></i>${photo.belongs_to_user.name}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                `;
+                                    list.append(listItem);
+                                });
+                            } else {
+                                // Jika tidak ada hasil, tampilkan pesan "Foto tidak ditemukan"
+                                list.html(
+                                    '<li class="p-1 mb-1 bg-hover-light-black">Foto tidak ditemukan</li>'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                } else {
+                    var list = $('#list-search-photos');
+                    list.html(
+                        '<li class="p-1 mb-1 bg-hover-light-black">Temukan foto dengan inputkan kata kunci!</li>'
+                    );
+                }
+            });
+        });
+    </script>
+    {{-- Ajax search  photos --}}
 
     {{-- STACK SCRIPT --}}
     @stack('script')

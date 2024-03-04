@@ -9,8 +9,8 @@
     <div class="card">
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-account" role="tabpanel"
-                    aria-labelledby="pills-account-tab" tabindex="0">
+                <div class="tab-pane fade show active" id="pills-account" role="tabpanel" aria-labelledby="pills-account-tab"
+                    tabindex="0">
                     <div class="row">
                         <div class="col-lg-6 d-flex align-items-stretch">
                             <div class="card w-100 position-relative overflow-hidden">
@@ -52,7 +52,7 @@
                                         @csrf
                                         @method('PATCH')
                                         <div class="mb-4">
-                                            <label for="exampleInputPassword1" class="form-label fw-semibold">kata sandi
+                                            <label for="exampleInputPassword1" class="form-label fw-semibold">Kata sandi
                                                 saat ini</label>
                                             <input type="password" class="form-control" id="current-pass" name="currentPass"
                                                 value="">

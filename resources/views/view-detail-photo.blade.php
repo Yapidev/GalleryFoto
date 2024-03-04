@@ -37,17 +37,29 @@
                 width: calc(100% - 40px);
                 columns: 3;
             }
+
+            #row {
+                gap: 0.5rem;
+            }
         }
 
         @media (max-width: 768px) {
             .photo-container {
                 columns: 2;
             }
+
+            #row {
+                gap: 0.5rem;
+            }
         }
 
         @media (max-width: 480px) {
             .photo-container {
                 columns: 1;
+            }
+
+            #row {
+                gap: 0.5rem;
             }
         }
 
@@ -111,7 +123,7 @@
     {{-- Photo content --}}
     <div class="card shadow-none border">
         <div class="card-body p-0">
-            <div class="row">
+            <div class="row" id="row">
                 <div class="col-lg-6">
                     <div class="d-flex align-items-center">
                         <img src="{{ Storage::url($photo->file_path) }}" alt="" class="w-100 h-auto rounded-2"
@@ -172,10 +184,11 @@
                                 @forelse ($photo->hasManyComments as $item)
                                     <div class="p-4 rounded-2 bg-light mb-3">
                                         <div class="d-flex align-items-center gap-3">
-                                            <img src="{{ asset('assets/images/profile/user-3.jpg') }}" alt=""
-                                                class="rounded-circle" width="33" height="33"
+                                            <img src="{{ asset($item->belongsToUser->avatar ? 'storage/' . $item->belongsToUser->avatar : 'assets/images/profile/user-1.jpg') }}"
+                                                alt="" class="rounded-circle" width="33" height="33"
                                                 style="object-fit: cover">
                                             <h6 class="fw-semibold mb-0 fs-4">{{ $item->belongsToUser->name }}</h6>
+                                            <p class="text-muted mb-0">{{ $item->created_at->diffForHumans() }}</p>
                                             <div class="ms-auto">
                                                 <div class="dropdown">
                                                     <a class="" href="javascript:void(0)" id="m1"
@@ -203,7 +216,7 @@
                                         <p class="my-3">{{ $item->content }}</p>
                                     </div>
                                 @empty
-                                    Tidak ada data.
+                                    Tidak ada komentar.
                                 @endforelse
                             </div>
                             {{-- Comment Section --}}
@@ -236,7 +249,7 @@
     <div class="related-products pt-7">
         <h4 class="mb-3 fw-semibold">Jelajahi foto lain nya..</h4>
         <div class="photo-container w-100">
-            @forelse ($photos as $item)
+            @forelse ($other_photos as $item)
                 <div class="overflow-hidden box">
                     <div class="position-relative">
                         <a href="{{ route('view-detail-photo', $item->slug) }}">
@@ -258,7 +271,7 @@
                     </div>
                 </div>
             @empty
-                tidak ada data
+                Tidak ada foto lain nya.
             @endforelse
         </div>
     </div>
@@ -266,16 +279,6 @@
 @endsection
 
 @push('script')
-    {{-- Ajax Setup --}}
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    </script>
-    {{-- Ajax Setup --}}
-
     {{-- Script untuk comment --}}
     <script>
         $(document).ready(function() {

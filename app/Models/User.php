@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -64,5 +65,25 @@ class User extends Authenticatable
     public function hasManyAlbums()
     {
         return $this->hasMany(Album::class);
+    }
+
+    /**
+     * Relasi belongsToMany ke table like_fotos
+     *
+     * @return void
+     */
+    public function likes()
+    {
+        return $this->belongsToMany(Foto::class, 'like_fotos')->withTimestamps();
+    }
+
+    /**
+     * Relasi belongsToMany ke table views
+     *
+     * @return BelongsToMany
+     */
+    public function viewedPhotos(): BelongsToMany
+    {
+        return $this->belongsToMany(Foto::class, 'views')->withTimestamps();
     }
 }
