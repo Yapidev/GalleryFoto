@@ -7,10 +7,6 @@
             <div class="position-relative z-index-5">
                 <div class="row">
                     <div class="col-xl-7 col-xxl-8">
-                        <a href="index-2.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
-                                width="180" alt="">
-                        </a>
                         <div class="d-none d-xl-flex align-items-center justify-content-center"
                             style="height: calc(100vh - 80px);">
                             <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/backgrounds/login-security.svg"
@@ -54,11 +50,8 @@
                                                 Ingat Saya
                                             </label>
                                         </div>
-                                        <a class="text-primary" href="{{ route('password.request') }}">Lupa
-                                            Password?</a>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign
-                                        In</button>
+                                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Masuk</button>
                                     <div class="d-flex align-items-center">
                                         <p class="fs-4 mb-0 text-dark">Belum punya akun?</p>
                                         <a class="text-primary fw-medium ms-2" href="{{ route('register') }}">Daftar</a>

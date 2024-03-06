@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,6 +60,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Fungsi untuk mendapatkan foto dengan visibilitas privat
+     *
+     * @return void
+     */
+    public function privatePhotos()
+    {
+        return $this->hasManyPhotos()->whereVisibility('private');
+    }
+
+    /**
      * Relasi has Many ke table albums
      *
      * @return void
@@ -85,5 +97,19 @@ class User extends Authenticatable
     public function viewedPhotos(): BelongsToMany
     {
         return $this->belongsToMany(Foto::class, 'views')->withTimestamps();
+    }
+
+    /**
+     * Fungsi untuk mendapatkan penayangan terakhir user
+     *
+     * @param  mixed $photo_id
+     * @return void
+     */
+    public function recentView($photo_id)
+    {
+        return $this->viewedPhotos()
+            ->whereFoto_id($photo_id)
+            ->whereDate('views.created_at', '>=', Carbon::now()->subDay())
+            ->exists();
     }
 }

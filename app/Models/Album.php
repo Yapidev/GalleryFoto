@@ -42,4 +42,14 @@ class Album extends Model
     {
         return $this->belongsToMany(Foto::class, 'album_details')->withTimestamps();
     }
+
+    /**
+     * Fungsi untuk menghitung jumlah foto yang ada dalam album
+     *
+     * @return void
+     */
+    public function photosCount()
+    {
+        return $this->photos()->count();
+    }
 }

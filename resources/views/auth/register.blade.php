@@ -8,10 +8,6 @@
             <div class="position-relative z-index-5">
                 <div class="row">
                     <div class="col-xl-7 col-xxl-8">
-                        <a href="index-2.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg"
-                                width="180" alt="">
-                        </a>
                         <div class="d-none d-xl-flex align-items-center justify-content-center"
                             style="height: calc(100vh - 80px);">
                             <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/backgrounds/login-security.svg"
@@ -47,7 +43,7 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="text-password" class="form-label">Password</label>
+                                        <label for="text-password" class="form-label">Kata Sandi</label>
                                         <input type="password" class="form-control @error('password')is-invalid @enderror"
                                             id="text-password" name="password" required minlength="6">
                                         @error('password')
@@ -58,13 +54,13 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="password-confirm"
-                                            class="form-label">{{ __('Konfirmasi Password') }}</label>
+                                            class="form-label">{{ __('Konfirmasi Kata Sandi') }}</label>
                                         <input id="password-confirm" type="password" class="form-control"
                                             name="password_confirmation" required autocomplete="new-password">
                                     </div>
                                     <div>
-                                        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign
-                                            Up</button>
+                                        <button type="submit"
+                                            class="btn btn-primary w-100 py-8 mb-4 rounded-2">Daftar</button>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <p class="fs-4 mb-0 text-dark">Sudah punya akun?</p>

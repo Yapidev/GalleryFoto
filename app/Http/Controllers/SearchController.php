@@ -12,7 +12,7 @@ class SearchController extends Controller
      * Fungsi untuk mencari foto
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function search(Request $request)
     {

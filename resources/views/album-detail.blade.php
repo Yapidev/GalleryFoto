@@ -2,52 +2,86 @@
 
 @push('style')
     <style>
-        .card-custome {
-            position: relative;
-            overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .photo-container {
             width: 100%;
-            height: 200px;
+            columns: 4;
+            column-gap: 20px
         }
 
-        .card-image {
-            position: relative;
-        }
-
-        .card {
+        .photo-container .box {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            margin-bottom: 10px;
+            break-inside: avoid;
         }
 
-        .card-overlay {
+        #img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .photo-container {
+                columns: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .photo-container {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                columns: 1;
+            }
+        }
+
+        .overlay {
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .card-custome:hover .card-overlay {
-            opacity: 1;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .text-light {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             color: #fff;
-            /* Set the text color to light */
+            opacity: 0;
+            transition: opacity 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
         }
 
-        .card-custome:hover .card {
-            filter: brightness(60%);
+        .overlay:hover {
+            opacity: 1;
+            /* Munculkan overlay saat dihover */
+        }
+
+        .overlay h3 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .overlay-icons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .overlay-icons a {
+            display: inline-block;
+            margin-right: 5px;
+            color: #fff;
+            font-size: 18px;
         }
     </style>
 @endpush
@@ -55,21 +89,17 @@
 @section('content')
     @if (isset($private_photos))
         {{-- Header --}}
-        <div class="card w-100 bg-light-info overflow-hidden shadow-none">
-            <div class="card-body py-3">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-sm-6">
-                        <h5 class="fw-semibold mb-9 fs-5">Ini adalah isi dari album "Privat" anda</h5>
-                        <p class="mb-9">
-                            Anda bisa menambah, mengedit, dan menghapus foto-foto yang ada di dalam album pribadi anda
-                        </p>
-                        <button data-bs-toggle="modal" data-bs-target="#add-album-modal" class="btn btn-primary">Upload Foto
-                            Sekarang!</button>
+        <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+            <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h4 class="fw-semibold mb-8">Album Privat</h4>
+                        <p class="mb-8">Album yang berisi foto-foto anda, dengan visibilitas privat.</p>
                     </div>
-                    <div class="col-sm-5">
-                        <div class="position-relative mb-n7 text-end">
-                            <img src="{{ asset('assets/images/backgrounds/welcome-bg2.png') }}" alt=""
-                                class="img-fluid">
+                    <div class="col-3">
+                        <div class="text-center mb-n5">
+                            <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt=""
+                                class="img-fluid mb-n4">
                         </div>
                     </div>
                 </div>
@@ -77,66 +107,41 @@
         </div>
         {{-- Header --}}
 
-        {{-- Foreach data photos --}}
-        <div class="row">
-            @forelse ($private_photos as $item)
-                <div class="col-12 col-md-4 my-3">
-                    <div class="card-custome rounded-4">
-                        <div class="card-image">
-                            <a href="javascript:void(0)" class="card text-white w-100 card-hover"
-                                style="background: url('{{ asset('storage/' . $item->file_path) }}') center; background-size: cover; width: 100%; height: 200px; object-fit: cover;">
-                            </a>
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="ms-auto">
-                                        <div class="d-flex mt-4">
-                                            <form id="deleteForm" action="{{ route('delete-photo', $item->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button style="border: none; background: transparent;" type="button"
-                                                    class="fs-5 text-danger cursor-pointer"><i
-                                                        class="ti ti-trash  delete-btn"></i></button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 100px">
-                                    <h4 class="card-title mb-1 text-light">{{ $item->title }}</h4>
-                                    <h6 class="card-text fw-normal text-light d-inline-block text-truncate"
-                                        style="max-width: 150px">
-                                        {{ $item->description }}
-                                    </h6>
-                                </div>
+        {{-- Foreach data private photos --}}
+        @if ($private_photos->isNotEmpty())
+            <div class="photo-container w-100">
+                @foreach ($private_photos as $item)
+                    <div class="overflow-hidden box">
+                        <div class="position-relative">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                                alt="...">
+                            <div class="overlay d-flex flex-column">
+                                <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
+                                <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
+                                    {{ $item->description }}
+                                </h6>
                             </div>
                         </div>
                     </div>
-                </div>
-            @empty
-                @include('components.no-data')
-            @endforelse
-        </div>
+                @endforeach
+            </div>
+        @else
+            @include('components.no-data')
+        @endif
         {{-- Foreach data photos --}}
     @else
         {{-- Header --}}
-        <div class="card w-100 bg-light-info overflow-hidden shadow-none">
-            <div class="card-body py-3">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-sm-6">
-                        <h5 class="fw-semibold mb-9 fs-5">Ini adalah isi dari album berjudul "{{ $album->name }}"</h5>
-                        <p class="mb-9">
-                            Anda bisa menambah, mengedit, dan menghapus foto-foto yang ada di dalam album anda
-                        </p>
-                        <button data-bs-toggle="modal" data-bs-target="#add-album-modal" class="btn btn-primary">Upload
-                            Album
-                            Sekarang!</button>
+        <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+            <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h4 class="fw-semibold mb-8">Ini adalah isi dari album berjudul "{{ $album->title }}"</h4>
+                        <p class="mb-8">Album ini berisi {{ $album->photosCount() }} foto.</p>
                     </div>
-                    <div class="col-sm-5">
-                        <div class="position-relative mb-n7 text-end">
-                            <img src="{{ asset('assets/images/backgrounds/welcome-bg2.png') }}" alt=""
-                                class="img-fluid">
+                    <div class="col-3">
+                        <div class="text-center mb-n5">
+                            <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt=""
+                                class="img-fluid mb-n4">
                         </div>
                     </div>
                 </div>
@@ -145,49 +150,74 @@
         {{-- Header --}}
 
         {{-- Foreach data photos --}}
-        <div class="row">
-            @forelse ($album->hasManyAlbumDetails as $item)
-                <div class="col-12 col-md-4 my-3">
-                    <div class="card-custome rounded-4">
-                        <div class="card-image">
-                            <a href="javascript:void(0)" class="card text-white w-100 card-hover"
-                                style="background: url('{{ asset('storage/' . $item->file_path) }}') center; background-size: cover; width: 100%; height: 200px; object-fit: cover;">
-                            </a>
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="ms-auto">
-                                        <div class="d-flex mt-4">
-                                            <form id="deleteForm" action="{{ route('delete-photo', $item->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button style="border: none; background: transparent;" type="button"
-                                                    class="fs-5 text-danger cursor-pointer"><i
-                                                        class="ti ti-trash  delete-btn"></i></button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 100px">
-                                    <h4 class="card-title mb-1 text-light">{{ $item->title }}</h4>
-                                    <h6 class="card-text fw-normal text-light d-inline-block text-truncate"
-                                        style="max-width: 150px">
-                                        {{ $item->description }}
-                                    </h6>
-                                </div>
+        <div class="photo-container w-100">
+            @foreach ($album->photos as $item)
+                <div class="overflow-hidden box">
+                    <div class="position-relative">
+                        <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                            alt="...">
+                        <div class="overlay d-flex flex-column">
+                            <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
+                            <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
+                                {{ $item->description }}
+                            </h6>
+                            <div class="overlay-icons">
+                                <a class="delete-btn cursor-pointer"
+                                    data-url="{{ route('delete-from-album', ['photo' => $item->id, 'album' => $album->id]) }}"><i
+                                        class="ti ti-trash"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            @empty
-                @include('components.no-data')
-            @endforelse
+            @endforeach
         </div>
         {{-- Foreach data photos --}}
     @endif
 @endsection
 
 @push('script')
+    <script>
+        $(document).ready(() => {
+            $('.delete-btn').on('click', function() {
+
+                let url = $(this).data('url');
+                let box = $(this).closest('.box');
+
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin menghapus album ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: "Hapus",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Sukses',
+                                        text: response.message,
+                                        icon: 'success',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                    box.remove();
+                                } else {
+                                    Swal.fire({
+                                        title: 'Gagal',
+                                        text: response.message,
+                                        icon: 'error',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+        });
+    </script>
 @endpush

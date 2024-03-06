@@ -37,16 +37,14 @@ class FotoController extends Controller
             ->get();
 
         $user = Auth::user();
-        $recentView = $user->viewedPhotos()
-            ->whereFoto_id($photo->id)
-            ->whereDate('views.created_at', '>=', Carbon::now()->subDay())
-            ->exists();
 
-        if (!$recentView) {
+        $albums = $user->hasManyAlbums()->get();
+
+        if (!$user->recentView($photo->id)) {
             $user->viewedPhotos()->attach($photo->id);
         }
 
-            return view('view-detail-photo', compact('photo', 'other_photos'));
+        return view('view-detail-photo', compact('photo', 'other_photos', 'albums'));
     }
 
     /**
@@ -107,6 +105,7 @@ class FotoController extends Controller
             'title' => $request->title,
             'slug' => $slug,
             'description' => $request->description,
+            'visibility' => $request->visibility
         ];
 
         if ($request->hasFile('photo')) {

@@ -90,6 +90,132 @@
             text-align: center;
             color: #fff;
         }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 600px;
+            user-select: none;
+
+            &>* {
+                margin: .5rem 0.5rem;
+            }
+        }
+
+
+
+        .checkbox-group-legend {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #9c9c9c;
+            text-align: center;
+            line-height: 1.125;
+            margin-bottom: 1.25rem;
+        }
+
+        .checkbox-input {
+            // Code to hide the input
+            clip: rect(0 0 0 0);
+            clip-path: inset(100%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+
+            &:checked+.checkbox-tile {
+                border-color: #2260ff;
+                box-shadow: 0 5px 10px rgba(#000, 0.1);
+                color: #2260ff;
+
+                &:before {
+                    transform: scale(1);
+                    opacity: 1;
+                    background-color: #2260ff;
+                    border-color: #2260ff;
+                }
+
+                .checkbox-icon,
+                .checkbox-label {
+                    color: #2260ff;
+                }
+            }
+
+            &:focus+.checkbox-tile {
+                border-color: #2260ff;
+                box-shadow: 0 5px 10px rgba(#000, 0.1), 0 0 0 4px #b5c9fc;
+
+                &:before {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+        }
+
+        .checkbox-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 7rem;
+            min-height: 7rem;
+            border-radius: 0.5rem;
+            border: 2px solid #b5bfd9;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(#000, 0.1);
+            transition: 0.15s ease;
+            cursor: pointer;
+            position: relative;
+
+            &:before {
+                content: "";
+                position: absolute;
+                display: block;
+                width: 1.25rem;
+                height: 1.25rem;
+                border: 2px solid #b5bfd9;
+                background-color: #fff;
+                border-radius: 50%;
+                top: 0.25rem;
+                left: 0.25rem;
+                opacity: 0;
+                transform: scale(0);
+                transition: 0.25s ease;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' fill='%23FFFFFF' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72.005 104 184 48 128.005' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'%3E%3C/polyline%3E%3C/svg%3E");
+                background-size: 12px;
+                background-repeat: no-repeat;
+                background-position: 50% 50%;
+            }
+
+            &:hover {
+                border-color: #2260ff;
+
+                &:before {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+        }
+
+        .checkbox-icon {
+            transition: .375s ease;
+            color: #494949;
+
+            svg {
+                width: 3rem;
+                height: 3rem;
+            }
+        }
+
+        .checkbox-label {
+            color: #707070;
+            transition: .375s ease;
+            text-align: center;
+        }
     </style>
 
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -149,21 +275,27 @@
                             {{-- jumlah views --}}
 
                             {{-- jumlah like --}}
-                            <div class="d-flex align-items-center gap-2 heart-icon cursor-pointer"
+                            <div class="d-flex align-items-center gap-2 heart-icon"
                                 onclick="toggleLike('{{ route('like-photo', $photo->id) }}')">
-                                <i class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }}"></i>
+                                <i
+                                    class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }} cursor-pointer"></i>
                                 <span id="like-count">{{ $photo->likesCount() }}</span>
                             </div>
                             {{-- jumlah like --}}
 
                             {{-- jumlah download --}}
-                            <div class="d-flex align-items-center gap-2 cursor-pointer">
+                            <div class="d-flex align-items-center gap-2">
                                 <a href="{{ route('download-photo', $photo->id) }}">
-                                    <i class="ti ti-download text-dark fs-5"></i>
+                                    <i class="ti ti-download text-dark fs-5 cursor-pointer"></i>
                                 </a>
                                 <span id="download-count">{{ $photo->downloads }}</span>
                             </div>
                             {{-- jumlah download --}}
+
+                            {{-- tambah ke album --}}
+                            <i class="ti ti-circle-plus text-dark fs-5 cursor-pointer" data-bs-toggle="modal"
+                                data-bs-target="#album-modal"></i>
+                            {{-- tambah ke album --}}
 
                             <div class="d-flex align-itemsn-center fs-2 ms-auto"><i
                                     class="ti ti-point text-dark"></i>{{ $photo->created_at->translatedFormat('d M Y') }}
@@ -253,8 +385,8 @@
                 <div class="overflow-hidden box">
                     <div class="position-relative">
                         <a href="{{ route('view-detail-photo', $item->slug) }}">
-                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-4"
-                                alt="...">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}"
+                                class="card-img-top rounded-4" alt="...">
                             <div class="overlay d-flex flex-column">
                                 <h3>{{ $item->title }}</h3>
                                 <p>{{ $item->description }}</p>
@@ -276,6 +408,46 @@
         </div>
     </div>
     {{-- Foto Lainnya --}}
+
+    {{-- Modal Album --}}
+    <div class="modal fade" id="album-modal" tabindex="-1" aria-labelledby="albumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="albumModalLabel">Tambahkan ke Album</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-to-album-form" action="{{ route('add-to-album', $photo->id) }}" method="POST">
+                        @csrf
+                        <div class="scrollable-album-list">
+                            <fieldset class="checkbox-group">
+                                @forelse ($albums as $item)
+                                    <div class="checkbox">
+                                        <label class="checkbox-wrapper">
+                                            <input type="checkbox" class="checkbox-input" value="{{ $item->id }}" name="album_id[]" />
+                                            <span class="checkbox-tile">
+                                                <span class="checkbox-label">{{ Str::limit($item->title, 10) }}</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                @empty
+                                    <p>Anda tidak memiliki album, <a class="text-primary"
+                                            href="{{ route('create-album') }}">Buat Album Sekarang</a></p>
+                                @endforelse
+                            </fieldset>
+                            <!-- Tombol Submit -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal Album --}}
 @endsection
 
 @push('script')

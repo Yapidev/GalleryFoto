@@ -17,7 +17,7 @@ class LikeController extends Controller
     {
         $userId = Auth::user()->id;
 
-        $isLiked = $photo->likes()->where('user_id', $userId)->exists();
+        $isLiked = $photo->isLiked();
 
         if ($isLiked) {
             $photo->likes()->detach($userId);

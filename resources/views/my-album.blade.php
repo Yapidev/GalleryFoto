@@ -27,8 +27,7 @@
 
         @media (max-width: 1200px) {
             .photo-container {
-                width: calc(100% - 40px);
-                columns: 3;
+                columns: 4;
             }
         }
 
@@ -74,7 +73,7 @@
 
         .overlay-icons {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             right: 10px;
         }
 
@@ -95,8 +94,8 @@
                 <div class="col-9">
                     <h4 class="fw-semibold mb-8">Album Saya</h4>
                     <p class="mb-8">Halaman yang berisi album yang sudah anda buat.</p>
-                    <button data-bs-toggle="modal" data-bs-target="#add-album-modal" class="btn btn-primary">Tambah
-                        Album</button>
+                    <a href="{{ route('create-album') }}" class="btn btn-primary">Tambah
+                        Album</a>
                 </div>
                 <div class="col-3">
                     <div class="text-center mb-n5">
@@ -109,45 +108,8 @@
     </div>
     {{-- Header --}}
 
-    {{-- Modal Upload Album --}}
-    <div class="modal fade modal-tambah" id="add-album-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5 " id="exampleModalLabel">Tambah Album</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formTambah" action="{{ route('upload-album') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row justify-content-center align-items-center">
-                            <div class="mb-3">
-                                <label class="form-label">Nama Album</label>
-                                <input id="name" class="form-control @error('name') is-invalid @enderror"
-                                    value="{{ old('name') }}" type="text" name="name" placeholder="Nama Album"
-                                    required>
-                                <div id="name-error"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Deskripsi Album </label>
-                                <textarea id="description" class="form-control @error('description') is-invalid @enderror" type="text" value=""
-                                    name="description" placeholder="Deskripsi Perusahaan">{{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary" id="submitButton">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- Modal Upload Album --}}
-
     {{-- Foreach data album --}}
-    <div class="photo-container w-100">
+    <div class="photo-container w-100" id="album-list">
         {{-- Private Album --}}
         <div class="overflow-hidden box">
             <div class="position-relative">
@@ -165,31 +127,77 @@
         </div>
         {{-- Private Album --}}
 
-        @forelse ($albums as $item)
+        @foreach ($albums as $item)
             <div class="overflow-hidden box">
                 <div class="position-relative">
                     <a href="{{ route('private-album') }}">
                         <img id="img" src="{{ asset('assets/images/pen.png') }}" class="card-img-top rounded-6"
                             alt="...">
                         <div class="overlay d-flex flex-column">
-                            <h4 class="card-title mb-1 text-light truncate">{{ $item->name }}</h4>
+                            <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
                             <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
                                 {{ $item->description }}
                             </h6>
                             <div class="overlay-icons">
-                                <a href=""><i class="ti ti-eye"></i></a>
-                                <a href=""><i class="ti ti-edit"></i></a>
-                                <a href=""><i class="ti ti-trash"></i></a>
+                                <a href="{{ route('album-detail', $item->id) }}"><i class="ti ti-eye"></i></a>
+                                <a href="{{ route('edit-album', $item->id) }}"><i class="ti ti-edit"></i></a>
+                                <a class="delete-btn cursor-pointer" data-url="{{ route('delete-album', $item->id) }}"><i
+                                        class="ti ti-trash"></i></a>
                             </div>
                         </div>
                     </a>
                 </div>
             </div>
-        @empty
-        @endforelse
+        @endforeach
     </div>
     {{-- Foreach data Album --}}
 @endsection
 
 @push('script')
+    {{-- Script delete Album --}}
+    <script>
+        $(document).ready(() => {
+            $('.delete-btn').on('click', function() {
+
+                let url = $(this).data('url');
+                let box = $(this).closest('.box');
+
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin menghapus album ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: "Hapus",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Sukses',
+                                        text: response.message,
+                                        icon: 'success',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                    box.remove();
+                                } else {
+                                    Swal.fire({
+                                        title: 'Gagal',
+                                        text: response.message,
+                                        icon: 'error',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+        });
+    </script>
+    {{-- Script delete Album --}}
 @endpush

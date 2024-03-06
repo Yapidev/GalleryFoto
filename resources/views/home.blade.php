@@ -99,32 +99,34 @@
     {{-- Header --}}
 
     {{-- Card post --}}
-    <div class="photo-container w-100">
-        @forelse ($photos as $item)
-            <div class="overflow-hidden box">
-                <div class="position-relative">
-                    <a href="{{ route('view-detail-photo', $item->slug) }}">
-                        <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
-                            alt="...">
-                        <div class="overlay d-flex flex-column">
-                            <h3>{{ Str::limit($item->title, 20) }}</h3>
-                            <p>{{ Str::limit($item->description, 20) }}</p>
+    @if ($photos->isNotEmpty())
+        <div class="photo-container w-100">
+            @foreach ($photos as $item)
+                <div class="overflow-hidden box">
+                    <div class="position-relative">
+                        <a href="{{ route('view-detail-photo', $item->slug) }}">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                                alt="...">
+                            <div class="overlay d-flex flex-column">
+                                <h3>{{ Str::limit($item->title, 20) }}</h3>
+                                <p>{{ Str::limit($item->description, 20) }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-2 pt-1">
+                        <div class="d-flex gap-2 align-items-center pt-2">
+                            <img class="rounded-circle"
+                                src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                alt="Profile Picture" style="width: 40px; height: 40px;">
+                            <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
                         </div>
-                    </a>
-                </div>
-                <div class="p-2 pt-1">
-                    <div class="d-flex gap-2 align-items-center pt-2">
-                        <img class="rounded-circle"
-                            src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
-                            alt="Profile Picture" style="width: 40px; height: 40px;">
-                        <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
                     </div>
                 </div>
-            </div>
-        @empty
-            @include('components.no-data')
-        @endforelse
-    </div>
+            @endforeach
+        </div>
+    @else
+        @include('components.no-data')
+    @endif
     {{-- Card post --}}
 @endsection
 

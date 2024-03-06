@@ -20,13 +20,7 @@
                 <div class="row align-items-center">
                     <div class="col-9">
                         <h4 class="fw-semibold mb-8">Edit Foto</h4>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ route('home') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Edit Foto</li>
-                            </ol>
-                        </nav>
+                        <p class="mb-8">Di halaman ini, anda dapat mengedit foto yang sudah anda upload.</p>
                     </div>
                     <div class="col-3">
                         <div class="text-center mb-n5">
@@ -100,7 +94,7 @@
                         </div>
                         <div class="d-flex justify-content-start gap-2">
                             <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
-                            <button type="submit" class="btn btn-primary">Unggah foto</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </div>
@@ -114,13 +108,7 @@
                 <div class="row align-items-center">
                     <div class="col-9">
                         <h4 class="fw-semibold mb-8">Unggah Foto</h4>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ route('home') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Simpan</li>
-                            </ol>
-                        </nav>
+                        <p class="mb-8">Di halaman ini, anda dapat mengupload foto.</p>
                     </div>
                     <div class="col-3">
                         <div class="text-center mb-n5">
@@ -156,7 +144,7 @@
                             <label for="title" class="form-label">Judul</label>
                             <input type="text" name="title" id="title-input"
                                 class="form-control @error('title') is-invalid @enderror"
-                                placeholder="Beri judul untuk foto anda.">
+                                placeholder="Beri judul untuk foto anda." required>
                             @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -214,14 +202,17 @@
         const formInputs = [titleInput, descriptionInput, submitButton, commentPermit, visibility];
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Cek apakah photo input kosong atau tidak saat halaman dimuat
-            const file = photoInput.files[0];
-            if (!file) {
-                // Jika photo input kosong, beri atribut disabled pada input-input yang diperlukan
-                formInputs.forEach(input => {
-                    input.setAttribute('disabled', 'disabled');
-                });
-            }
+
+            @if (request()->routeIs('create-photo'))
+                // Cek apakah photo input kosong atau tidak saat halaman dimuat
+                const file = photoInput.files[0];
+                if (!file) {
+                    // Jika photo input kosong, beri atribut disabled pada input-input yang diperlukan
+                    formInputs.forEach(input => {
+                        input.setAttribute('disabled', 'disabled');
+                    });
+                }
+            @endif
 
             // Tambahkan event listener saat gambar pratinjau diklik
             imagePreview.addEventListener('click', function() {

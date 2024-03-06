@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -35,7 +35,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     // Route Get
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('photo/{slug}', [FotoController::class, 'view'])->name('view-detail-photo');
+    Route::get('view-detail-photo/{slug}', [FotoController::class, 'view'])->name('view-detail-photo');
     Route::get('my-photo', [MyPhotoController::class, 'index'])->name('my-photo');
     Route::get('create-photo', [UploadOrUpdateController::class, 'create'])->name('create-photo');
     Route::get('edit-photo/{photo}', [UploadOrUpdateController::class, 'edit'])->name('edit-photo');
@@ -45,20 +45,25 @@ Route::middleware('auth')->group(function () {
     Route::get('download-photo/{photo}', [DownloadController::class, 'download'])->name('download-photo');
     Route::get('liked-photos', [LikedPhotosController::class, 'view'])->name('liked-photos');
     Route::get('search-photos', [SearchController::class, 'search'])->name('search-photos');
+    Route::get('create-album', [AlbumController::class, 'create'])->name('create-album');
+    Route::get('edit-album/{album}', [AlbumController::class, 'edit'])->name('edit-album');
 
     // Route Post
     Route::post('upload-photo', [FotoController::class, 'upload'])->name('upload-photo');
     Route::post('post-comment/{foto_id}', [KomentarController::class, 'store'])->name('post-comment');
     Route::post('upload-album', [AlbumController::class, 'upload'])->name('upload-album');
     Route::post('like-photo/{photo}', [LikeController::class, 'like'])->name('like-photo');
+    Route::post('add-photo-to-album/{photo}', [AlbumController::class, 'addToAlbum'])->name('add-to-album');
 
     // Route Put
     Route::put('update-photo/{photo}', [FotoController::class, 'update'])->name('update-photo');
+    Route::put('update-album/{album}', [AlbumController::class, 'update'])->name('update-album');
 
     // Route Delete
     Route::delete('delete-comment/{comment}', [KomentarController::class, 'deleteComment'])->name('delete-comment');
     Route::delete('delete-photo/{photo}', [FotoController::class, 'delete'])->name('delete-photo');
     Route::delete('delete-album/{album}', [AlbumController::class, 'delete'])->name('delete-album');
+    Route::delete('delete-photo-from-album/{photo}/{album}', [AlbumController::class, 'deleteFromAlbum'])->name('delete-from-album');
 
     // Profile Routes
     Route::controller(ProfileController::class)->group(function () {

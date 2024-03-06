@@ -16,12 +16,7 @@ class UploadOrUpdateController extends Controller
      */
     public function create()
     {
-        $albums = Album::query()
-            ->whereuser_id(Auth::user()->id)
-            ->latest()
-            ->get();
-
-        return view('form', compact('albums'));
+        return view('form-photo');
     }
 
     /**
@@ -41,6 +36,6 @@ class UploadOrUpdateController extends Controller
             ->latest()
             ->get();
 
-        return view('form', compact('photo', 'albums'));
+        return view('form-photo', compact('photo', 'albums'));
     }
 }
