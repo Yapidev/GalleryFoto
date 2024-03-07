@@ -9,7 +9,7 @@
         }
 
         #comments-container {
-            max-height: 500px;
+            max-height: 300px;
             /* Batas tinggi kontainer komentar */
             overflow-y: auto;
             /* Mengaktifkan scroll jika konten melebihi batas tinggi */
@@ -425,7 +425,8 @@
                                 @forelse ($albums as $item)
                                     <div class="checkbox">
                                         <label class="checkbox-wrapper">
-                                            <input type="checkbox" class="checkbox-input" value="{{ $item->id }}" name="album_id[]" />
+                                            <input type="checkbox" class="checkbox-input" value="{{ $item->id }}"
+                                                name="album_id[]" />
                                             <span class="checkbox-tile">
                                                 <span class="checkbox-label">{{ Str::limit($item->title, 10) }}</span>
                                             </span>

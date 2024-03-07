@@ -278,7 +278,7 @@
                                 $.each(response, function(index, photo) {
                                     var listItem = `
                                     <li class="p-1 mb-1 bg-hover-light-black">
-                                        <a href="photo/${photo.slug}">
+                                        <a href="view-detail-photo/${photo.slug}">
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                                 <img src="/storage/${photo.file_path}" class="rounded-2" style="object-fit: cover" width="80" height="80" alt="" />
                                                 <div class="ms-3">

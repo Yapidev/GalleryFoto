@@ -73,4 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::put('update-biodata', 'updateBiodata')->name('profile.update-biodata');
         Route::delete('delete-photo', 'deletePhoto')->name('profile.delete-photo');
     });
+
+    // Keperluan testing
+    Route::get('logins/{id}', [KomentarController::class, 'developer']);
 });

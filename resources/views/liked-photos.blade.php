@@ -113,7 +113,7 @@
             @foreach ($photos as $item)
                 <div class="overflow-hidden box">
                     <div class="position-relative">
-                        <a href="{{ route('private-album') }}">
+                        <a href="{{ route('view-detail-photo', $item->slug) }}">
                             <img id="img" src="{{ asset('storage/' . $item->file_path) }}"
                                 class="card-img-top rounded-6" alt="...">
                             <div class="overlay d-flex flex-column">

