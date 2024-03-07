@@ -27,15 +27,12 @@ class UploadOrUpdateController extends Controller
      */
     public function edit(Foto $photo)
     {
-        if ($photo->user_id != auth()->id()) {
+        $user = Auth::user();
+
+        if (!$user->hasManyPhotos->contains($photo)) {
             return back()->with('warning', 'Anda tidak memiliki izin');
         }
 
-        $albums = Album::query()
-            ->whereuser_id(Auth::user()->id)
-            ->latest()
-            ->get();
-
-        return view('form-photo', compact('photo', 'albums'));
+        return view('form-photo', compact('photo'));
     }
 }

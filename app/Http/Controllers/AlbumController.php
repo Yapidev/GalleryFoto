@@ -37,6 +37,12 @@ class AlbumController extends Controller
      */
     public function detail(Album $album)
     {
+        $user = Auth::user();
+
+        if (!$user->hasManyAlbums->contains($album)) {
+            return back()->wiht('warning', 'Anda tidak memiliki izin');
+        }
+
         return view('album-detail', compact('album'));
     }
 

@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-start gap-2">
-                            <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
+                            <a href="{{ route('my-photo') }}" type="button" class="btn btn-danger">Kembali</a>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-start gap-2">
-                            <a href="{{ url()->previous() }}" type="button" class="btn btn-danger">Kembali</a>
+                            <a href="{{ route('my-photo') }}" type="button" class="btn btn-danger">Kembali</a>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>

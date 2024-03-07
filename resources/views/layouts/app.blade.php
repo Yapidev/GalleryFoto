@@ -283,7 +283,7 @@
                                                 <img src="/storage/${photo.file_path}" class="rounded-2" style="object-fit: cover" width="80" height="80" alt="" />
                                                 <div class="ms-3">
                                                     <h5 class="mb-1 fs-3">${photo.title}</h5>
-                                                    <span class="mb-1 d-block text-dark">${photo.description}</span>
+                                                    ${photo.description ? `<span class="mb-1 d-block text-dark">${photo.description}</span>` : ''}
                                                     <p class="mb-0 d-flex text-dark align-items-center gap-2">
                                                         <i class="ti ti-user fs-4"></i>${photo.belongs_to_user.name}
                                                     </p>
