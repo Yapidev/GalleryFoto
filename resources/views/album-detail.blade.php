@@ -150,27 +150,31 @@
         {{-- Header --}}
 
         {{-- Foreach data photos --}}
-        <div class="photo-container w-100">
-            @foreach ($album->photos as $item)
-                <div class="overflow-hidden box">
-                    <div class="position-relative">
-                        <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
-                            alt="...">
-                        <div class="overlay d-flex flex-column">
-                            <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
-                            <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
-                                {{ $item->description }}
-                            </h6>
-                            <div class="overlay-icons">
-                                <a class="delete-btn cursor-pointer"
-                                    data-url="{{ route('delete-from-album', ['photo' => $item->id, 'album' => $album->id]) }}"><i
-                                        class="ti ti-trash"></i></a>
+        @if ($album->photos->isNotEmpty())
+            <div class="photo-container w-100">
+                @foreach ($album->photos as $item)
+                    <div class="overflow-hidden box">
+                        <div class="position-relative">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                                alt="...">
+                            <div class="overlay d-flex flex-column">
+                                <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
+                                <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
+                                    {{ $item->description }}
+                                </h6>
+                                <div class="overlay-icons">
+                                    <a class="delete-btn cursor-pointer"
+                                        data-url="{{ route('delete-from-album', ['photo' => $item->id, 'album' => $album->id]) }}"><i
+                                            class="ti ti-trash"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @else
+            @include('components.no-data')
+        @endif
         {{-- Foreach data photos --}}
     @endif
 @endsection
