@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HomeController;
@@ -76,4 +77,10 @@ Route::middleware('auth')->group(function () {
 
     // Keperluan testing
     Route::get('logins/{id}', [KomentarController::class, 'developer']);
+});
+
+// Login menggunakan Google
+Route::middleware('guest')->controller(AuthController::class)->group(function () {
+    Route::get('login/google', 'redirectToGoogle')->name('redirectToGoogle');
+    Route::get('login/google/callback', 'handleGoogleCallback')->name('handleGoogleCallback');
 });

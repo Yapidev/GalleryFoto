@@ -17,7 +17,23 @@
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-6 col-xl-9">
-                                <h2 class="mb-3 fs-7 fw-bolder">Login ke Photopie</h2>
+                                <h2 class="mb-3 fs-7 fw-bolder">Login ke Photopie 😍</h2>
+                                <div class="row">
+                                    <div class="col-12 mb-2 mb-sm-0">
+                                        <a class="btn btn-white text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
+                                            href="{{ route('redirectToGoogle') }}" role="button">
+                                            <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/google-icon.svg"
+                                                alt="" class="img-fluid me-2" width="18" height="18">
+                                            <span class="d-none d-sm-block me-1 flex-shrink-0">Login dengan</span>Google
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="position-relative text-center my-4">
+                                    <p class="mb-0 fs-4 px-3 d-inline-block bg-white text-dark z-index-5 position-relative">
+                                        atau login dengan</p>
+                                    <span
+                                        class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
+                                </div>
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">

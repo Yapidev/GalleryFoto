@@ -18,7 +18,7 @@
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-6 col-xl-9">
-                                <h2 class="mb-3 fs-7 fw-bolder">Daftar akun Photopie</h2>
+                                <h2 class="mb-3 fs-7 fw-bolder">Daftar akun Photopie 🥰</h2>
                                 <form action="{{ route('register') }}" method="post">
                                     @csrf
                                     <div class="mb-3">

@@ -247,7 +247,7 @@
     </div>
 
     {{-- Photo content --}}
-    <div class="card shadow-none border">
+    <div class="card shadow-none">
         <div class="card-body p-0">
             <div class="row" id="row">
                 <div class="col-lg-6">

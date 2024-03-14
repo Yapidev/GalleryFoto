@@ -64,7 +64,7 @@ class FotoController extends Controller
 
         if ($request->hasFile('photo')) {
             // Mengunggah file foto ke direktori 'photos' di sistem penyimpanan publik
-            $file_path = $request->photo->store('photos', 'public');
+            $file_path = $request->photo->storeAs('photos', $, 'public');
         }
 
         $data = [

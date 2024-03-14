@@ -110,7 +110,7 @@
                                                     <label for="exampleInputPassword1" class="form-label fw-semibold">Nama
                                                         Panggilan</label>
                                                     <input type="text" class="form-control complex-colorpicker"
-                                                        id="nickname-input" placeholder="Isi Nickname" name="nickname"
+                                                        id="nickname-input" placeholder="Isi Nama Panggilan" name="nickname"
                                                         value="{{ $user->nickname }}">
                                                 </div>
                                                 <div class="mb-4">
