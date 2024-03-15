@@ -75,6 +75,19 @@
         .hover-underline:hover {
             text-decoration: underline;
         }
+
+        .share-btn {
+            cursor: pointer;
+            /* Menjadikan kursor menjadi tanda tangan saat di hover */
+            transition: transform 0.3s;
+            /* Mengatur durasi animasi */
+        }
+
+        /* Menambahkan transformasi saat tombol dihover */
+        .share-btn:hover {
+            transform: scale(1.2);
+            /* Memperbesar ukuran tombol saat dihover */
+        }
     </style>
 @endpush
 
@@ -116,6 +129,22 @@
                             <div class="overlay d-flex flex-column">
                                 <h3>{{ Str::limit($item->title, 20) }}</h3>
                                 <p>{{ Str::limit($item->description, 30) }}</p>
+                                <div class="d-flex gap-1 justify-content-center align-items-center fs-6">
+                                    {{-- Jumlah Like --}}
+                                    <i class="fas fa-heart fs-5"></i>
+                                    <span id="like-count">{{ $item->likesCount() }}</span>
+                                    {{-- Jumlah Like --}}
+
+                                    {{-- Jumlah View --}}
+                                    <i class="ti ti-eye fs-5"></i>
+                                    {{ $item->viewsCount() }}
+                                    {{-- Jumlah View --}}
+
+                                    {{-- Button share --}}
+                                    <i class="ti ti-share share-btn"
+                                        onclick="share('{{ route('view-detail-photo', $item->slug) }}')"></i>
+                                    {{-- Button share --}}
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -154,6 +183,22 @@
                             <div class="overlay d-flex flex-column">
                                 <h3>{{ Str::limit($item->title, 20) }}</h3>
                                 <p>{{ Str::limit($item->description, 30) }}</p>
+                                <div class="d-flex gap-1 justify-content-center align-items-center fs-6">
+                                    {{-- Jumlah Like --}}
+                                    <i class="fas fa-heart fs-5"></i>
+                                    <span id="like-count">{{ $item->likesCount() }}</span>
+                                    {{-- Jumlah Like --}}
+
+                                    {{-- Jumlah View --}}
+                                    <i class="ti ti-eye fs-5"></i>
+                                    {{ $item->viewsCount() }}
+                                    {{-- Jumlah View --}}
+
+                                    {{-- Button share --}}
+                                    <i class="ti ti-share share-btn"
+                                        onclick="share('{{ route('view-detail-photo', $item->slug) }}')"></i>
+                                    {{-- Button share --}}
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -192,6 +237,22 @@
                             <div class="overlay d-flex flex-column">
                                 <h3>{{ Str::limit($item->title, 20) }}</h3>
                                 <p>{{ Str::limit($item->description, 30) }}</p>
+                                <div class="d-flex gap-1 justify-content-center align-items-center fs-6">
+                                    {{-- Jumlah Like --}}
+                                    <i class="fas fa-heart fs-5"></i>
+                                    <span id="like-count">{{ $item->likesCount() }}</span>
+                                    {{-- Jumlah Like --}}
+
+                                    {{-- Jumlah View --}}
+                                    <i class="ti ti-eye fs-5"></i>
+                                    {{ $item->viewsCount() }}
+                                    {{-- Jumlah View --}}
+
+                                    {{-- Button share --}}
+                                    <i class="ti ti-share share-btn"
+                                        onclick="share('{{ route('view-detail-photo', $item->slug) }}')"></i>
+                                    {{-- Button share --}}
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -215,4 +276,37 @@
 @endsection
 
 @push('script')
+    {{-- Script Share --}}
+    <script>
+        function share(url) {
+            // Membuat elemen textarea sementara untuk menyalin URL
+            var tempInput = document.createElement("textarea");
+            tempInput.value = url;
+            document.body.appendChild(tempInput);
+
+            // Memilih dan menyalin URL
+            tempInput.select();
+            document.execCommand("copy");
+
+            // Menghapus elemen textarea sementara
+            document.body.removeChild(tempInput);
+
+            // Swal message
+            Swal.fire({
+                title: 'Sukses',
+                text: "URL telah disalin ke clipboard: " + url,
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+
+        // Mencegah perilaku default dari anchor tag
+        document.querySelectorAll('.share-btn').forEach(item => {
+            item.addEventListener('click', event => {
+                event.preventDefault(); // Mencegah navigasi ke href
+            });
+        });
+    </script>
+    {{-- Script Share --}}
 @endpush
