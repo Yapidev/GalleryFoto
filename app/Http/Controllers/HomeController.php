@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Foto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -30,6 +31,10 @@ class HomeController extends Controller
             ->where('visibility', 'public')
             ->get();
 
-        return view('home', compact('photos'));
+        $user = Auth::user();
+        $likedPhotos = $user->likes()->take(10)->get();
+        $followingPhotos = $user->following()->take(10)->get();
+
+        return view('home', compact('photos', 'likedPhotos', 'followingPhotos'));
     }
 }

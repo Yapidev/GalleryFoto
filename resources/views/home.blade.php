@@ -102,6 +102,8 @@
     </div>
     {{-- Header --}}
 
+    {{-- Foto General --}}
+    <h4 class="mb-3 fw-semibold">Jelajahi foto..</h4>
     {{-- Card post --}}
     @if ($photos->isNotEmpty())
         <div class="photo-container w-100">
@@ -133,6 +135,83 @@
         @include('components.no-data')
     @endif
     {{-- Card post --}}
+    {{-- Foto General --}}
+
+    {{-- Foto yang di sukai --}}
+    <div class="d-flex justify-content-between pt-5">
+        <h4 class="mb-3 fw-semibold">Foto yang anda sukai..</h4>
+        <a href="{{ route('liked-photos') }}" class="text-dark hover-underline">Lihat selengkapnya</a>
+    </div>
+    {{-- Card post --}}
+    @if ($likedPhotos->isNotEmpty())
+        <div class="photo-container w-100">
+            @foreach ($likedPhotos as $item)
+                <div class="overflow-hidden box">
+                    <div class="position-relative">
+                        <a href="{{ route('view-detail-photo', $item->slug) }}">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                                alt="...">
+                            <div class="overlay d-flex flex-column">
+                                <h3>{{ Str::limit($item->title, 20) }}</h3>
+                                <p>{{ Str::limit($item->description, 30) }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-2 pt-1">
+                        <div class="d-flex gap-2 align-items-center pt-2">
+                            <img class="rounded-circle"
+                                src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                alt="Profile Picture" style="width: 40px; height: 40px; object-fit: cover">
+                            <a href="{{ route('profile-public', encrypt($item->belongsToUser->id)) }}"
+                                class="fw-bold text-dark hover-underline">{{ $item->belongsToUser->name }}</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        @include('components.no-data')
+    @endif
+    {{-- Card post --}}
+    {{-- Foto yang di sukai --}}
+
+    {{-- Foto following --}}
+    <div class="d-flex justify-content-between pt-5">
+        <h4 class="mb-3 fw-semibold">Yang anda ikuti..</h4>
+        <a href="{{ route('my-followings') }}" class="text-dark hover-underline">Lihat selengkapnya</a>
+    </div>
+    {{-- Card post --}}
+    @if ($followingPhotos->isNotEmpty())
+        <div class="photo-container w-100">
+            @foreach ($followingPhotos as $item)
+                <div class="overflow-hidden box">
+                    <div class="position-relative">
+                        <a href="{{ route('view-detail-photo', $item->slug) }}">
+                            <img id="img" src="{{ Storage::url($item->file_path) }}" class="card-img-top rounded-6"
+                                alt="...">
+                            <div class="overlay d-flex flex-column">
+                                <h3>{{ Str::limit($item->title, 20) }}</h3>
+                                <p>{{ Str::limit($item->description, 30) }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-2 pt-1">
+                        <div class="d-flex gap-2 align-items-center pt-2">
+                            <img class="rounded-circle"
+                                src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                alt="Profile Picture" style="width: 40px; height: 40px; object-fit: cover">
+                            <a href="{{ route('profile-public', encrypt($item->belongsToUser->id)) }}"
+                                class="fw-bold text-dark hover-underline">{{ $item->belongsToUser->name }}</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        @include('components.no-data')
+    @endif
+    {{-- Card post --}}
+    {{-- Foto following --}}
 @endsection
 
 @push('script')
