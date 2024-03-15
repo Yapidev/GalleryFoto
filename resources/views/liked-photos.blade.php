@@ -111,20 +111,42 @@
     @if ($photos->isNotEmpty())
         <div class="photo-container">
             @foreach ($photos as $item)
-                <div class="overflow-hidden box">
-                    <div class="position-relative">
-                        <a href="{{ route('view-detail-photo', $item->slug) }}">
-                            <img id="img" src="{{ asset('storage/' . $item->file_path) }}"
-                                class="card-img-top rounded-6" alt="...">
-                            <div class="overlay d-flex flex-column">
-                                <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
-                                <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
-                                    {{ $item->description }}
-                                </h6>
-                            </div>
-                        </a>
+                @if ($item->trashed())
+                    <div class="overflow-hidden box">
+                        <div class="position-relative">
+                            <a href="{{ route('private-album') }}">
+                                <img id="img" src="{{ asset('assets/images/no-data-image.jpg') }}"
+                                    class="card-img-top rounded-6" alt="...">
+                                <div class="overlay d-flex flex-column">
+                                    <h4 class="card-title mb-1 text-light">Foto Dihapus</h4>
+                                    <h6 class="card-text fw-normal text-light d-inline-block" style="max-width: 150px">
+                                        Foto yang anda like telah di hapus oleh author.
+                                    </h6>
+                                    <div class="overlay-icons">
+                                        <a class="delete-btn cursor-pointer"
+                                            data-url="{{ route('unlike', $item->id) }}"><i
+                                                class="ti ti-trash"></i></a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="overflow-hidden box">
+                        <div class="position-relative">
+                            <a href="{{ route('view-detail-photo', $item->slug) }}">
+                                <img id="img" src="{{ asset('storage/' . $item->file_path) }}"
+                                    class="card-img-top rounded-6" alt="...">
+                                <div class="overlay d-flex flex-column">
+                                    <h4 class="card-title mb-1 text-light truncate">{{ $item->title }}</h4>
+                                    <h6 class="card-text fw-normal text-light d-inline-block text-truncate">
+                                        {{ $item->description }}
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                @endif
             @endforeach
         </div>
     @else
@@ -134,4 +156,50 @@
 @endsection
 
 @push('script')
+    {{-- Script un like --}}
+    <script>
+        $(document).ready(() => {
+            $('.delete-btn').on('click', function() {
+
+                let url = $(this).data('url');
+                let box = $(this).closest('.box');
+
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin "batal menyukai" foto ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: "Hapus",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Sukses',
+                                        text: response.message,
+                                        icon: 'success',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                    box.remove();
+                                } else {
+                                    Swal.fire({
+                                        title: 'Gagal',
+                                        text: response.message,
+                                        icon: 'error',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+        });
+    </script>
+    {{-- Script un like --}}
 @endpush

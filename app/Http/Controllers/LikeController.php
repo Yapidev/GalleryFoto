@@ -29,4 +29,21 @@ class LikeController extends Controller
 
         return response()->json(['likes_count' => $likesCount, 'is_liked' => !$isLiked]);
     }
+
+    /**
+     * Fungsi untuk unlike
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function unlike(string $id)
+    {
+        $photo = Foto::withTrashed()->find($id);
+        $photo->likes()->detach(auth()->id());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto berhasil dihapus'
+        ]);
+    }
 }

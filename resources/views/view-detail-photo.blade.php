@@ -273,18 +273,19 @@
                             {{-- jumlah views --}}
 
                             {{-- jumlah like --}}
-                            <div class="d-flex align-items-center gap-2 heart-icon" data-bs-toggle="tooltip" title="Suka"
+                            <div class="d-flex align-items-center gap-2 heart-icon"
                                 onclick="toggleLike('{{ route('like-photo', $photo->id) }}')">
-                                <i
-                                    class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }} cursor-pointer"></i>
+                                <i class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }} cursor-pointer"
+                                    data-bs-toggle="tooltip" title="Suka"></i>
                                 <span id="like-count">{{ $photo->likesCount() }}</span>
                             </div>
                             {{-- jumlah like --}}
 
                             {{-- jumlah download --}}
-                            <div class="d-flex align-items-center gap-2" data-bs-toggle="tooltip" title="Jumlah Unduh">
+                            <div class="d-flex align-items-center gap-2">
                                 <a href="{{ route('download-photo', $photo->id) }}">
-                                    <i class="ti ti-download text-dark fs-5 cursor-pointer"></i>
+                                    <i class="ti ti-download text-dark fs-5 cursor-pointer" data-bs-toggle="tooltip"
+                                        title="Unduh"></i>
                                 </a>
                                 <span id="download-count">{{ $photo->downloads }}</span>
                             </div>

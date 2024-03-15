@@ -21,7 +21,7 @@ class HomeController extends Controller
     /**
      * Menampilkan Halaman utama dari aplikasi Photopie.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return void
      */
     public function index()
     {

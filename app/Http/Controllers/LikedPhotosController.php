@@ -14,7 +14,7 @@ class LikedPhotosController extends Controller
     public function view()
     {
         $user = User::find(auth()->id());
-        $photos = $user->likes()->get();
+        $photos = $user->likes()->withTrashed()->get();
 
         return view('liked-photos', compact('photos'));
     }

@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('delete-album/{album}', [AlbumController::class, 'delete'])->name('delete-album');
     Route::delete('delete-photo-from-album/{photo}/{album}', [AlbumController::class, 'deleteFromAlbum'])->name('delete-from-album');
     Route::delete('category-delete/{category}', [CategoryController::class, 'delete'])->name('category-delete');
+    Route::delete('unlike/{id}', [LikeController::class, 'unlike'])->name('unlike');
 
     // Profile Routes
     Route::controller(ProfileController::class)->group(function () {

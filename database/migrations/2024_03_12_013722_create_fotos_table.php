@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('visibility', ['private', 'public'])->default('public');
             $table->string('file_path');
             $table->unsignedBigInteger('downloads')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
