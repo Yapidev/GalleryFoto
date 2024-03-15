@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KomentarController;
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('search-photos', [SearchController::class, 'search'])->name('search-photos');
     Route::get('create-album', [AlbumController::class, 'create'])->name('create-album');
     Route::get('edit-album/{album}', [AlbumController::class, 'edit'])->name('edit-album');
+    Route::get('my-followings', [FollowController::class, 'myFollowings'])->name('my-followings');
 
     // Route Post
     Route::post('upload-photo', [FotoController::class, 'upload'])->name('upload-photo');
@@ -55,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::post('upload-album', [AlbumController::class, 'upload'])->name('upload-album');
     Route::post('like-photo/{photo}', [LikeController::class, 'like'])->name('like-photo');
     Route::post('add-photo-to-album/{photo}', [AlbumController::class, 'addToAlbum'])->name('add-to-album');
+    Route::post('follow/{user}', [FollowController::class, 'follow'])->name('follow');
 
     // Route Put
     Route::put('update-photo/{photo}', [FotoController::class, 'update'])->name('update-photo');
@@ -69,6 +72,7 @@ Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::controller(ProfileController::class)->group(function () {
         Route::get('profile', 'profilePage')->name('profile.index');
+        Route::get('profile-public/{id}', 'profilePublic')->name('profile-public');
         Route::patch('update-photo', 'updatePhotoProfileProcess')->name('profile.update-photo');
         Route::patch('update-password', 'updatePassword')->name('profile.update-password');
         Route::put('update-biodata', 'updateBiodata')->name('profile.update-biodata');

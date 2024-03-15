@@ -62,15 +62,19 @@ class FotoController extends Controller
             'photo' => ['required', 'image']
         ]);
 
+        $slug = Str::slug($request->title);
+
         if ($request->hasFile('photo')) {
+            // menyimpan nama
+            $title = $slug . '.' . $request->file('photo')->getClientOriginalExtension();
             // Mengunggah file foto ke direktori 'photos' di sistem penyimpanan publik
-            $file_path = $request->photo->storeAs('photos', $, 'public');
+            $file_path = $request->photo->storeAs('photos', $title, 'public');
         }
 
         $data = [
             'user_id' => Auth::user()->id,
             'title' => $request->title,
-            'slug' => Str::slug($request->title),
+            'slug' => $slug,
             'comment_permit' => $request->commentPermit ? true : false,
             'description' => $request->description ?: null,
             'file_path' => $file_path,
@@ -110,7 +114,8 @@ class FotoController extends Controller
 
         if ($request->hasFile('photo')) {
             Storage::disk('public')->delete($photo->file_path);
-            $file_path = $request->photo->store('photos', 'public');
+            $title = $slug . '.' . $request->file('photo')->getClientOriginalExtension();
+            $file_path = $request->photo->storeAs('photos', $title, 'public');
             $data['file_path'] = $file_path;
         }
 

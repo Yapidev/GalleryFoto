@@ -135,8 +135,10 @@
 
                                             </div>
                                             <div class="d-grid py-4 px-7 pt-8">
-                                                <a href="{{ route('profile.index') }}"
+                                                <a href="{{ route('profile-public', encrypt(Auth::user()->id)) }}"
                                                     class="btn btn-outline-primary mb-3">Profile</a>
+                                                <a href="{{ route('profile.index') }}"
+                                                    class="btn btn-outline-warning mb-3">Pengaturan</a>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                                     class="btn btn-outline-danger">Log Out</a>
@@ -200,6 +202,14 @@
                                 <i class="ti ti-photo-heart"></i>
                             </span>
                             <span class="hide-menu">Foto Favorit</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('my-followings') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-photo-plus"></i>
+                            </span>
+                            <span class="hide-menu">Mengikuti</span>
                         </a>
                     </li>
                 </ul>

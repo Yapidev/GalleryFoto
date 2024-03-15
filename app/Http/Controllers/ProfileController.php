@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -16,10 +17,20 @@ class ProfileController extends Controller
      *
      * @return void
      */
-    protected function profilePage()
+    public function profilePage()
     {
         $user = Auth::user();
         return response()->view('profile', compact('user'));
+    }
+
+    public function profilePublic(String $id)
+    {
+        $user = User::find(decrypt($id));
+        $photos = $user->hasManyPhotos()->get();
+        $followers = $user->followers()->get();
+        $followings = $user->following()->get();
+
+        return view('profile-public', compact('user', 'photos', 'followers', 'followings'));
     }
 
     /**
@@ -28,7 +39,7 @@ class ProfileController extends Controller
      * @param  mixed $request
      * @return void
      */
-    protected function updatePhotoProfileProcess(Request $request)
+    public function updatePhotoProfileProcess(Request $request)
     {
         try {
             $request->validate([
@@ -63,7 +74,7 @@ class ProfileController extends Controller
      * @param  mixed $request
      * @return void
      */
-    protected function updatePassword(Request $request)
+    public function updatePassword(Request $request)
     {
         try {
             $request->validate([
@@ -100,7 +111,7 @@ class ProfileController extends Controller
      *
      * @return void
      */
-    protected function deletePhoto()
+    public function deletePhoto()
     {
         try {
             $user = User::findOrFail(Auth::user()->id);
@@ -122,7 +133,7 @@ class ProfileController extends Controller
      * @param  mixed $request
      * @return void
      */
-    protected function updateBiodata(Request $request)
+    public function updateBiodata(Request $request)
     {
         try {
             $userId = Auth::user()->id;

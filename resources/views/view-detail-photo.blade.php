@@ -231,7 +231,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                    href="{{ route('home') }}">Home</a></li>
+                                    href="{{ route('home') }}">Beranda</a></li>
                             <li class="breadcrumb-item" aria-current="page">Detail Foto</li>
                         </ol>
                     </nav>
@@ -268,14 +268,14 @@
                         @endif
                         <div class="d-flex align-items-center gap-4 pb-2">
                             {{-- jumlah views --}}
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2" data-bs-toggle="tooltip" title="Jumlah Tayangan">
                                 <i class="ti ti-eye text-dark fs-5"></i>
                                 {{ $photo->viewsCount() }}
                             </div>
                             {{-- jumlah views --}}
 
                             {{-- jumlah like --}}
-                            <div class="d-flex align-items-center gap-2 heart-icon"
+                            <div class="d-flex align-items-center gap-2 heart-icon" data-bs-toggle="tooltip" title="Suka"
                                 onclick="toggleLike('{{ route('like-photo', $photo->id) }}')">
                                 <i
                                     class="fas fa-heart fs-5 {{ $photo->isLiked() ? 'text-danger' : '' }} cursor-pointer"></i>
@@ -284,7 +284,7 @@
                             {{-- jumlah like --}}
 
                             {{-- jumlah download --}}
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2" data-bs-toggle="tooltip" title="Jumlah Unduh">
                                 <a href="{{ route('download-photo', $photo->id) }}">
                                     <i class="ti ti-download text-dark fs-5 cursor-pointer"></i>
                                 </a>
@@ -293,8 +293,8 @@
                             {{-- jumlah download --}}
 
                             {{-- tambah ke album --}}
-                            <i class="ti ti-circle-plus text-dark fs-5 cursor-pointer" data-bs-toggle="modal"
-                                data-bs-target="#album-modal"></i>
+                            <i class="ti ti-circle-plus text-dark fs-5 cursor-pointer" onclick="openAlbum()"
+                                data-bs-toggle="tooltip" title="Tambahkan ke Album"></i>
                             {{-- tambah ke album --}}
 
                             <div class="d-flex align-itemsn-center fs-2 ms-auto"><i
@@ -302,6 +302,18 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- Author --}}
+                    <div class="p-2 pt-1">
+                        <div class="d-flex gap-2 align-items-center pt-2">
+                            <img class="rounded-circle"
+                                src="{{ $photo->belongsToUser->avatar ? Storage::url($photo->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
+                                alt="Profile Picture" style="width: 40px; height: 40px;">
+                            <a href="{{ route('profile-public', encrypt($photo->belongsToUser->id)) }}"
+                                class="fw-bold text-dark">{{ $photo->belongsToUser->name }}</a>
+                        </div>
+                    </div>
+                    {{-- Author --}}
 
                     {{-- Main Komentar Section --}}
                     @if ($photo->comment_permit == true)
@@ -334,7 +346,8 @@
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="dropdown-item delete-btn">
+                                                                    <button type="submit"
+                                                                        class="dropdown-item delete-btn">
                                                                         <i
                                                                             class="ti ti-trash text-muted me-1 fs-4"></i>Hapus
                                                                     </button>
@@ -433,7 +446,7 @@
                                         </label>
                                     </div>
                                 @empty
-                                    <p>Anda tidak memiliki album, <a class="text-primary"
+                                    <p>Anda belum memiliki album, <a class="text-primary"
                                             href="{{ route('create-album') }}">Buat Album Sekarang</a></p>
                                 @endforelse
                             </fieldset>
@@ -515,6 +528,14 @@
         }
     </script>
     {{-- Script untuk like dan unlike --}}
+
+    {{-- Script untuk buka modal --}}
+    <script>
+        function openAlbum() {
+            $('#album-modal').modal('show');
+        }
+    </script>
+    {{-- Script untuk buka modal --}}
 
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 @endpush

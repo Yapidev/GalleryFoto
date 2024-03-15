@@ -118,7 +118,8 @@
                             <img class="rounded-circle"
                                 src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
                                 alt="Profile Picture" style="width: 40px; height: 40px;">
-                            <span class="fw-bold">{{ $item->belongsToUser->name }}</span>
+                            <a href="{{ route('profile-public', encrypt($item->belongsToUser->id)) }}"
+                                class="fw-bold text-dark">{{ $item->belongsToUser->name }}</a>
                         </div>
                     </div>
                 </div>

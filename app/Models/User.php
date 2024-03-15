@@ -70,6 +70,47 @@ class User extends Authenticatable
     }
 
     /**
+     * Fungsi relasi belongsToMany ke table follows
+     *
+     * @return void
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'followed_user_id');
+    }
+
+    /**
+     * Fungsi untuk cek apakah user terkait sudah memfollow user lain
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function followed($id)
+    {
+        return $this->following()->where('followed_user_id', $id)->exists();
+    }
+
+    /**
+     * Fungsi untuk menghitung jumlah followers
+     *
+     * @return void
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_user_id', 'user_id');
+    }
+
+    /**
+     * Fungsi untuk menghitung jumlah foto
+     *
+     * @return void
+     */
+    public function photosCount()
+    {
+        return $this->hasManyPhotos()->whereVisibility('public')->count();
+    }
+
+    /**
      * Relasi has Many ke table albums
      *
      * @return void
