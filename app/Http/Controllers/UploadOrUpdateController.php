@@ -16,7 +16,8 @@ class UploadOrUpdateController extends Controller
      */
     public function create()
     {
-        return view('form-photo');
+        $category = Auth::user()->category()->get();
+        return view('form-photo', compact('category'));
     }
 
     /**

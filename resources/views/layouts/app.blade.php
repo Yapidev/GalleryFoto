@@ -212,6 +212,14 @@
                             <span class="hide-menu">Mengikuti</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('my-category') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-category"></i>
+                            </span>
+                            <span class="hide-menu">Kategori Saya</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

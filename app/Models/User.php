@@ -7,6 +7,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -57,6 +58,16 @@ class User extends Authenticatable
     public function hasManyPhotos()
     {
         return $this->hasMany(Foto::class);
+    }
+
+    /**
+     * Relasi has many ke table categories
+     *
+     * @return HasMany
+     */
+    public function category(): HasMany
+    {
+        return $this->hasMany(Category::class);
     }
 
     /**

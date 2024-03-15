@@ -162,6 +162,19 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label for="" class="form-label">Kategori {Opsional}</label>
+                            <select name="category" class="form-select" id="category">
+                                @if ($category->isNotEmpty())
+                                    <option disabled selected>Pilih Kategori</option>
+                                    @foreach ($category as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                @else
+                                    <option disabled selected>Anda tidak memiliki kategori</option>
+                                @endif
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="" class="form-label">Visibilitas</label>
                             <select name="visibility" class="form-select disabled" id="visibility">
                                 <option value="public" selected>Publik</option>
@@ -198,8 +211,9 @@
         const descriptionInput = document.getElementById('description-input');
         const submitButton = document.querySelector('button[type="submit"]');
         const commentPermit = document.getElementById('comment-permit');
+        const category = document.getElementById('category');
         const visibility = document.getElementById('visibility');
-        const formInputs = [titleInput, descriptionInput, submitButton, commentPermit, visibility];
+        const formInputs = [titleInput, descriptionInput, submitButton, commentPermit, visibility, category];
 
         document.addEventListener('DOMContentLoaded', function() {
 

@@ -81,6 +81,10 @@ class FotoController extends Controller
             'visibility' => $request->visibility
         ];
 
+        if ($request->category) {
+            $data['category_id'] = $request->category;
+        }
+
         // Membuat entitas Foto baru dengan data yang diterima
         Foto::create($data);
 
@@ -117,6 +121,10 @@ class FotoController extends Controller
             $title = $slug . '.' . $request->file('photo')->getClientOriginalExtension();
             $file_path = $request->photo->storeAs('photos', $title, 'public');
             $data['file_path'] = $file_path;
+        }
+
+        if ($request->category) {
+            $data['category_id'] = $request->category;
         }
 
         $photo->update($data);

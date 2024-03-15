@@ -216,6 +216,10 @@
             transition: .375s ease;
             text-align: center;
         }
+
+        .hover-underline:hover {
+            text-decoration: underline;
+        }
     </style>
 
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -228,13 +232,7 @@
             <div class="row align-items-center">
                 <div class="col-9">
                     <h4 class="fw-semibold mb-8">Detail Foto</h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                    href="{{ route('home') }}">Beranda</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Detail Foto</li>
-                        </ol>
-                    </nav>
+                    <p class="mb-8">Halaman yang berisi detail foto {{ $photo->title }}.</p>
                 </div>
                 <div class="col-3">
                     <div class="text-center mb-n5">
@@ -310,7 +308,7 @@
                                 src="{{ $photo->belongsToUser->avatar ? Storage::url($photo->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
                                 alt="Profile Picture" style="width: 40px; height: 40px;">
                             <a href="{{ route('profile-public', encrypt($photo->belongsToUser->id)) }}"
-                                class="fw-bold text-dark">{{ $photo->belongsToUser->name }}</a>
+                                class="fw-bold text-dark hover-underline">{{ $photo->belongsToUser->name }}</a>
                         </div>
                     </div>
                     {{-- Author --}}

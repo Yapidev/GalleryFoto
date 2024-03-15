@@ -71,6 +71,10 @@
             text-align: center;
             color: #fff;
         }
+
+        .hover-underline:hover {
+            text-decoration: underline;
+        }
     </style>
 @endpush
 
@@ -109,7 +113,7 @@
                                 alt="...">
                             <div class="overlay d-flex flex-column">
                                 <h3>{{ Str::limit($item->title, 20) }}</h3>
-                                <p>{{ Str::limit($item->description, 20) }}</p>
+                                <p>{{ Str::limit($item->description, 30) }}</p>
                             </div>
                         </a>
                     </div>
@@ -117,9 +121,9 @@
                         <div class="d-flex gap-2 align-items-center pt-2">
                             <img class="rounded-circle"
                                 src="{{ $item->belongsToUser->avatar ? Storage::url($item->belongsToUser->avatar) : asset('assets/images/profile/user-1.jpg') }}"
-                                alt="Profile Picture" style="width: 40px; height: 40px;">
+                                alt="Profile Picture" style="width: 40px; height: 40px; object-fit: cover">
                             <a href="{{ route('profile-public', encrypt($item->belongsToUser->id)) }}"
-                                class="fw-bold text-dark">{{ $item->belongsToUser->name }}</a>
+                                class="fw-bold text-dark hover-underline">{{ $item->belongsToUser->name }}</a>
                         </div>
                     </div>
                 </div>

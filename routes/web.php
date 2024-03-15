@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\FotoController;
@@ -50,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('create-album', [AlbumController::class, 'create'])->name('create-album');
     Route::get('edit-album/{album}', [AlbumController::class, 'edit'])->name('edit-album');
     Route::get('my-followings', [FollowController::class, 'myFollowings'])->name('my-followings');
+    Route::get('category', [CategoryController::class, 'index'])->name('my-category');
+    Route::get('create-category', [CategoryController::class, 'create'])->name('create-category');
+    Route::get('update-category/{id}', [CategoryController::class, 'edit'])->name('update-category');
 
     // Route Post
     Route::post('upload-photo', [FotoController::class, 'upload'])->name('upload-photo');
@@ -58,16 +62,19 @@ Route::middleware('auth')->group(function () {
     Route::post('like-photo/{photo}', [LikeController::class, 'like'])->name('like-photo');
     Route::post('add-photo-to-album/{photo}', [AlbumController::class, 'addToAlbum'])->name('add-to-album');
     Route::post('follow/{user}', [FollowController::class, 'follow'])->name('follow');
+    Route::post('category-post', [CategoryController::class, 'post'])->name('category-post');
 
     // Route Put
     Route::put('update-photo/{photo}', [FotoController::class, 'update'])->name('update-photo');
     Route::put('update-album/{album}', [AlbumController::class, 'update'])->name('update-album');
+    Route::put('category-update/{category}', [CategoryController::class, 'update'])->name('category-update');
 
     // Route Delete
     Route::delete('delete-comment/{comment}', [KomentarController::class, 'deleteComment'])->name('delete-comment');
     Route::delete('delete-photo/{photo}', [FotoController::class, 'delete'])->name('delete-photo');
     Route::delete('delete-album/{album}', [AlbumController::class, 'delete'])->name('delete-album');
     Route::delete('delete-photo-from-album/{photo}/{album}', [AlbumController::class, 'deleteFromAlbum'])->name('delete-from-album');
+    Route::delete('category-delete/{category}', [CategoryController::class, 'delete'])->name('category-delete');
 
     // Profile Routes
     Route::controller(ProfileController::class)->group(function () {
