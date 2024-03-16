@@ -75,6 +75,23 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label for="" class="form-label">Kategori {Opsional}</label>
+                            <select name="category" class="form-select" id="category">
+                                @if ($category->isNotEmpty())
+                                    <option disabled selected>Pilih Kategori</option>
+                                    @foreach ($category as $item)
+                                        @if ($photo->category_id == $item->id)
+                                            <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
+                                        @else
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <option disabled selected>Anda tidak memiliki kategori</option>
+                                @endif
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="" class="form-label">Visibilitas</label>
                             <select name="visibility" class="form-select" id="visibility">
                                 <option value="public" {{ $photo->visibility == 'public' ? 'selected' : '' }}>Publik

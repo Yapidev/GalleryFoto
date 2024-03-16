@@ -34,6 +34,8 @@ class UploadOrUpdateController extends Controller
             return back()->with('warning', 'Anda tidak memiliki izin');
         }
 
-        return view('form-photo', compact('photo'));
+        $category = $user->category;
+
+        return view('form-photo', compact('photo', 'category'));
     }
 }

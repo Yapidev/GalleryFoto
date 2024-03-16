@@ -29,13 +29,17 @@ class AuthController extends Controller
     {
         try {
             $user = Socialite::driver('google')->stateless()->user();
-            $existingAccount = User::where('email', $user->email)->first();
+            $existingAccount = User::query()
+                ->where('email', $user->email)
+                ->where('google_id', $user->id)
+                ->first();
 
             if ($existingAccount) {
                 Auth::login($existingAccount);
             } else {
                 $pass = Str::random(16);
                 $data = [
+                    'google_id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                     'password' => bcrypt($pass)
